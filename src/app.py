@@ -10,10 +10,10 @@ App initialization file
 
 import dash
 import dash_html_components as html
-import dash_dcc_components as dcc
+import dash_core_components as dcc
 from dash.dependencies import Input, Output, State
 
-import plotly.graph_objets as go #move into viz files ?
+import plotly.graph_objects as go #move into viz files ?
 
 app = dash.Dash(__name__)
 app.title = "" #TBD
