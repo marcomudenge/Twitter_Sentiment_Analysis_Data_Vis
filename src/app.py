@@ -87,3 +87,14 @@ def display_tweet(click, cur_tweet, cur_index):
         return tweet.tolist(), stats[stats['timestamp']==date]['index_variation'] 
     else:
         return cur_tweet, cur_index
+    
+@app.callback(
+    Output('vis_1', 'figure'),
+    [Input('my-date-picker-range', 'start_date'),
+     Input('my-date-picker-range', 'end_date')]
+)
+def update_vis1(start_date, end_date):
+    # Create the new figure with the updated x range
+    print(start_date)
+    fig = vis1.maquette_1(stats_vis1, start_date, end_date)
+    return fig
