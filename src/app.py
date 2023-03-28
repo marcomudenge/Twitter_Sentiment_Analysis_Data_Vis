@@ -65,13 +65,14 @@ app.layout = html.Div(className='content', children = [
 
 @app.callback(
     [Output('tweet_row', 'children'), Output('index_var', 'children')],
-    [Input('vis_1', 'clickData')]
+    [Input('vis_1', 'clickData')],
+    [State('tweet_row', 'children'), State('index_var', 'children')]
     )
-def display_tweet(click):
+def display_tweet(click, cur_tweet, cur_index):
     
     ctx = dash.callback_context
     if not ctx.triggered:
-        pass
+        return [], []
     
     if (ctx.triggered[0]['prop_id'].split('.')[0]=='vis_1') & (ctx.triggered[0]['value']['points'][0]['curveNumber'] == 0):
         date =  ctx.triggered[0]['value']['points'][0]['x'] ### date is a string
@@ -84,4 +85,5 @@ def display_tweet(click):
         tweet = tweets[mask].sort_values(by = 'n_followers').head(1)['text'].values
         
         return tweet.tolist(), stats[stats['timestamp']==date]['index_variation'] 
-    pass
+    else:
+        return cur_tweet, cur_index
