@@ -13,8 +13,7 @@ import dash_html_components as html
 import dash_core_components as dcc
 from dash.dependencies import Input, Output, State
 
-from datetime import date
-from datetime import datetime, timedelta
+from datetime import date, datetime
 import plotly.graph_objects as go #move into viz files ?
 import preprocess
 import vis1
@@ -24,8 +23,10 @@ stats = pd.read_csv('assets/df_stats.csv')
 tweets = pd.read_csv('assets/df_tweets.csv')
 stats_vis1 = preprocess.stats_vis1(stats)
 tweets_vis1 = preprocess.tweets_vis1(tweets)
+start = datetime.strptime('2021-04-03', "%Y-%m-%d")
+end = datetime.strptime('2021-04-20', "%Y-%m-%d")
 
-vis_1 = vis1.maquette_1(stats_vis1,'2021-04-03', '2021-04-20')
+vis_1 = vis1.maquette_1(stats_vis1, start, end)
 
 
 app = dash.Dash(__name__)
@@ -42,14 +43,14 @@ app.layout = html.Div(className='content', children = [
                         id='vis_1',
                         figure=vis_1
                     )
-                ], style={'width': '70%', 'display': 'inline-block'}),
+                ], style={'width': '75%', 'display': 'inline-block'}),
 
-                html.Div([
+                html.Div([html.H1('Influencial tweet'),
                     html.Table([
-                        html.Tr([html.Th('Influencial Tweet', colSpan=2)]),
-                        html.Tr(children=[html.Th(id='index_var'),html.Th(id = 'tweet_row')])
-                    ])
-                ], style={'width': '30%', 'display': 'inline-block', 'vertical-align': 'top'})
+                        html.Tr(children=[html.Th(id='index_var', style={'width': '20%'}),html.Th(id = 'tweet_row',style={'text-align': 'left','width': '70%'})]),
+                    ], style={'border-spacing': '10px','width': '90%','height': '30vh'})
+                    ], style={'width': '20%', 'display': 'inline-block', 'vertical-align': 'top','border': '1px solid black',
+                    'padding': '10px','border': '1px solid black','border-radius': '10px','overflow': 'hidden','margin': '10px'})
         ]),
         html.Div(className='bandeau_dessous', children=[
             html.Div(className='selecteur_viz', children=[
@@ -57,7 +58,9 @@ app.layout = html.Div(className='content', children = [
             ]),
             dcc.DatePickerRange(id='my-date-picker-range',  #selecteur de date pour la viz 4
                                 min_date_allowed=date(2021, 3, 1),
-                                max_date_allowed=date(2021, 8, 1)
+                                max_date_allowed=date(2021, 8, 1),
+                                start_date=start,
+                                end_date=end
             )
         ])
     ])
@@ -75,16 +78,17 @@ def display_tweet(click, cur_tweet, cur_index):
         return [], []
     
     if (ctx.triggered[0]['prop_id'].split('.')[0]=='vis_1') & (ctx.triggered[0]['value']['points'][0]['curveNumber'] == 0):
-        date =  ctx.triggered[0]['value']['points'][0]['x'] ### date is a string
-        # convert input date string to datetime object
-        date_obj = datetime.strptime(date, '%Y-%m-%d %H:%M')
-        date_minus_3 = date_obj - timedelta(days=3)
-        date_minus_3_str =  date_minus_3.strftime('%Y-%m-%d %H:%M')
+        date =  ctx.triggered[0]['value']['points'][0]['x'] 
+        tweet1, tweet2 = vis1.get_tweet(date)
         
-        mask= (tweets['timestamp']<= date ) & (tweets['timestamp']>= date_minus_3_str)
-        tweet = tweets[mask].sort_values(by = 'n_followers').head(1)['text'].values
+        output1 = html.Div([
+                    html.P(tweet1),
+                    html.P(tweet2, style={'margin-top': '0px', 'padding-top': '0px'})
+                ], style={'line-height': '80%'})
         
-        return tweet.tolist(), stats[stats['timestamp']==date]['index_variation'] 
+        index_variation = stats[stats['timestamp']==date]['index_variation'].round(2).values
+        output2 = f'index_var :{index_variation}'
+        return output1, output2
     else:
         return cur_tweet, cur_index
     
@@ -95,6 +99,5 @@ def display_tweet(click, cur_tweet, cur_index):
 )
 def update_vis1(start_date, end_date):
     # Create the new figure with the updated x range
-    print(start_date)
     fig = vis1.maquette_1(stats_vis1, start_date, end_date)
     return fig

@@ -6,7 +6,7 @@ def stats_vis1(stats):
     stats['Activity']=(stats['Activity']/1e6).round(1)
     stats['index_value']=stats['index_value'].round(2)
     stats['product'] = stats['price_variation']*stats['index_variation']
-    stats.timestamp=pd.to_datetime(stats.timestamp)
+    stats.timestamp=pd.to_datetime(stats.timestamp).dt.tz_localize(None)
     return stats
 
 def tweets_vis1(tweets):

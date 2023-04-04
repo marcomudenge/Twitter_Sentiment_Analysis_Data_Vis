@@ -1,7 +1,7 @@
 import pandas as pd
 import plotly.graph_objects as go
 import plotly.express as px
-
+from datetime import datetime, timedelta
 import more_itertools as it
 from plotly.subplots import make_subplots
 
@@ -11,8 +11,24 @@ def hover_line():
 def hover_bar():
     return '%{x}</br></br><b>Index :</b> %{y} </br><b>Activity :</b> %{marker.color}'+'<extra></extra>'
 
-def maquette_1(df, start_date = '2021-07-20', end_date = '2021-08-01'):
+def get_tweet(date):
+    ''' 
+    arg :
+        date string yyyy-mm-dd
+    return: 
+        2 tweet with the most follower
+    '''
+    from app import tweets_vis1
+    date_obj = datetime.strptime(date, '%Y-%m-%d %H:%M')
+    date_minus_3 = date_obj - timedelta(days=3)
+    date_minus_3_str =  date_minus_3.strftime('%Y-%m-%d %H:%M')
+    
+    mask= (tweets_vis1['timestamp']<= date ) & (tweets_vis1['timestamp']>= date_minus_3_str)
+    tweet = tweets_vis1[mask].sort_values(by = 'n_followers').head(2)['text'].values
+    return tweet[0], tweet[1]
+    
 
+def maquette_1(df, start_date = '2021-07-20', end_date = '2021-08-01'):
     df = df[(df['timestamp']<= end_date ) & (df['timestamp']>= start_date)]
     # create coordinate  pairs
     x_pairs = it.pairwise(df['timestamp'].to_list())
@@ -64,3 +80,4 @@ def maquette_1(df, start_date = '2021-07-20', end_date = '2021-08-01'):
     fig.update_traces(marker_line_width = 0,selector=dict(type="bar")) ### no space between bar, making the graph more visible with large range of x axis
     
     return fig
+
