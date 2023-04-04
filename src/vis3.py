@@ -1,0 +1,29 @@
+import pandas as pd
+import plotly.graph_objects as go
+import plotly.express as px
+
+import more_itertools as it
+from plotly.subplots import make_subplots
+
+def init_figure(data):
+    fig = go.Figure()
+    # TODO : Update the template to include our new theme and set the title
+    fig.update_layout(
+        dragmode=False,
+        barmode='relative',
+        title={
+        'text': 'Lines per act',
+        'xanchor': 'center',
+        'yanchor': 'top'},
+        yaxis_title='Lines (count)',
+    )
+    
+    fig = go.Figure(fig)  # conversion back to Graph Object
+    
+    fig.data = [] 
+    ### ajout de hovertemplate pour prendre en compte l'info-bulle
+    fig = px.bar(data, x='sum_influence_3_days', y='Count',
+            color='Variation',
+          height=400)
+
+    return fig
