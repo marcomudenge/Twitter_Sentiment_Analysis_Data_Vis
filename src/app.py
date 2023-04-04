@@ -45,12 +45,20 @@ app.layout = html.Div(className='content', children = [
                     )
                 ], style={'width': '75%', 'display': 'inline-block'}),
 
-                html.Div([html.H1('Influencial tweet'),
-                    html.Table([
-                        html.Tr(children=[html.Th(id='index_var', style={'width': '20%'}),html.Th(id = 'tweet_row',style={'text-align': 'left','width': '70%'})]),
-                    ], style={'border-spacing': '10px','width': '90%','height': '30vh'})
-                    ], style={'width': '20%', 'display': 'inline-block', 'vertical-align': 'top','border': '1px solid black',
-                    'padding': '10px','border': '1px solid black','border-radius': '10px','overflow': 'hidden','margin': '10px'})
+                html.Div(
+                    children=[
+                        html.Div(id='panel',
+                                children=[
+                                    html.Div(['Influencial tweets'], style={
+                                        'fontSize': '24px'}),
+                                    html.Div(id='date_row', style={
+                                        'fontSize': '20px',"margin-top": "6px"}),
+                                    html.Div(id='index_var', style={
+                                        'fontSize': '20px',"margin-top": "6px"}),
+                                    html.Div(id='tweet_row', style={
+                                        'fontSize': '16px'})])]
+                    ,style={'width': '23%', 'display': 'inline-block', 'vertical-align': 'top',
+                    'padding': '10px','border': '1px solid black','border-radius': '10px'})
         ]),
         html.Div(className='bandeau_dessous', children=[
             html.Div(className='selecteur_viz', children=[
@@ -67,11 +75,11 @@ app.layout = html.Div(className='content', children = [
 ])
 
 @app.callback(
-    [Output('tweet_row', 'children'), Output('index_var', 'children')],
+    [Output('tweet_row', 'children'), Output('index_var', 'children'), Output('date_row', 'children')],
     [Input('vis_1', 'clickData')],
-    [State('tweet_row', 'children'), State('index_var', 'children')]
+    [State('tweet_row', 'children'), State('index_var', 'children'), State('date_row', 'children')]
     )
-def display_tweet(click, cur_tweet, cur_index):
+def display_tweet(click, cur_tweet, cur_index, cur_date):
     
     ctx = dash.callback_context
     if not ctx.triggered:
@@ -86,11 +94,12 @@ def display_tweet(click, cur_tweet, cur_index):
                     html.P(tweet2, style={'margin-top': '0px', 'padding-top': '0px'})
                 ], style={'line-height': '80%'})
         
-        index_variation = stats[stats['timestamp']==date]['index_variation'].round(2).values
-        output2 = f'index_var :{index_variation}'
-        return output1, output2
+        index_variation = stats[stats['timestamp']==date]['index_variation'].round(2).values[0]
+        output2 = f'Index variation : {index_variation}'
+        output3 = 'Date : ' + str(date)
+        return output1, output2, output3
     else:
-        return cur_tweet, cur_index
+        return cur_tweet, cur_index, cur_date
     
 @app.callback(
     Output('vis_1', 'figure'),
