@@ -11,14 +11,21 @@ App initialization file
 import dash
 import dash_html_components as html
 import dash_core_components as dcc
-from dash.dependencies import Input, Output, State
+import pandas as pd
 
 from datetime import date
 
-import plotly.graph_objects as go #move into viz files ?
+import preprocess as pp
+import n_3
+
+df = pd.read_csv('../src/assets/df_stats.csv')
+df = pp.convert_dataframe(df)
+
+fig = n_3.polar_chart(df)
+fig.show()
 
 app = dash.Dash(__name__)
-app.title = "" #TBD
+app.title = ""  # TBD
 
 app.layout = html.Div(className='content', children = [
     html.Header(children=[
@@ -26,7 +33,7 @@ app.layout = html.Div(className='content', children = [
     ]),
     html.Main(className='', children=[
         html.Div(className='viz1', children=[
-            None #viz numero 1 en haut ?
+            None  # viz numero 1 en haut ?
         ]),
         html.Div(className='bandeau_dessous', children=[
             html.Div(className='selecteur_viz', children=[
@@ -39,9 +46,3 @@ app.layout = html.Div(className='content', children = [
         ])
     ])
 ])
-
-#callbacks ici
-#@app.callback(
-#    Output(),
-#    Input()
-#)
