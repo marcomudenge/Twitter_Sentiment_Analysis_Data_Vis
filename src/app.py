@@ -83,7 +83,7 @@ def display_tweet(click, cur_tweet, cur_index, cur_date):
     
     ctx = dash.callback_context
     if not ctx.triggered:
-        return [], []
+        return [], [], []
     
     if (ctx.triggered[0]['prop_id'].split('.')[0]=='vis_1') & (ctx.triggered[0]['value']['points'][0]['curveNumber'] == 0):
         date =  ctx.triggered[0]['value']['points'][0]['x'] 
