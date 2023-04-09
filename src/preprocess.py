@@ -1,13 +1,14 @@
 import pandas as pd
 
 def stats_vis1(stats):
-    stats['price_variation'] = stats['price'].diff()
-    stats.rename(columns={'sum_influence_3_days':'Activity'}, inplace=True)
-    stats['Activity']=(stats['Activity']/1e6).round(1)
-    stats['index_value']=stats['index_value'].round(2)
-    stats['product'] = stats['price_variation']*stats['index_variation']
-    stats.timestamp=pd.to_datetime(stats.timestamp).dt.tz_localize(None)
-    return stats
+    stats_copy = stats.copy(True)
+    stats_copy['price_variation'] = stats_copy['price'].diff()
+    stats_copy.rename(columns={'sum_influence_3_days':'Activity'}, inplace=True)
+    stats_copy['Activity']=(stats_copy['Activity']/1e6).round(1)
+    stats_copy['index_value']=stats_copy['index_value'].round(2)
+    stats_copy['product'] = stats_copy['price_variation']*stats_copy['index_variation']
+    stats_copy.timestamp=pd.to_datetime(stats_copy.timestamp).dt.tz_localize(None)
+    return stats_copy
 
 def tweets_vis1(tweets):
     tweets.timestamp=pd.to_datetime(tweets.timestamp)
@@ -33,5 +34,4 @@ def stats_vis3(stats):
     
     merged = pd.concat([lower_df, middle_df, upper_df])
     merged['sum_influence_3_days'] = merged['sum_influence_3_days'].astype(str).str.replace(r'[][()]+', '', regex=True)
-    print(merged)
     return merged

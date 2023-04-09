@@ -30,8 +30,6 @@ end = datetime.strptime('2021-04-20', "%Y-%m-%d")
 vis_1 = vis1.maquette_1(stats_vis1, start, end)
 
 
-
-
 app = dash.Dash(__name__)
 app.title = "" #TBD
 
@@ -108,8 +106,7 @@ def display_tweet(click, cur_tweet, cur_index, cur_date):
                     html.P(tweet1),
                     html.P(tweet2, style={'margin-top': '0px', 'padding-top': '0px'})
                 ], style={'line-height': '80%'})
-        
-        index_variation = stats[stats['timestamp']==date]['index_variation'].round(2).values[0]
+        index_variation = stats_vis1[stats_vis1['timestamp']==date]['index_variation'].round(2).values[0]
         output2 = f'Index variation : {index_variation}'
         output3 = 'Date : ' + str(date)
         return output1, output2, output3
