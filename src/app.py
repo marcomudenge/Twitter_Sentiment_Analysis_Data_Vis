@@ -9,8 +9,8 @@ App initialization file
 """
 
 import dash
-import dash_html_components as html
-import dash_core_components as dcc
+from dash import html
+from dash import dcc
 from dash.dependencies import Input, Output, State
 
 from datetime import date, datetime
@@ -18,7 +18,11 @@ import plotly.graph_objects as go #move into viz files ?
 import preprocess
 import vis1
 import vis3
+import radar
 import pandas as pd
+
+app = dash.Dash(__name__)
+app.title = "" #TBD
 
 stats = pd.read_csv('assets/df_stats.csv')
 tweets = pd.read_csv('assets/df_tweets.csv')
@@ -26,14 +30,16 @@ stats_vis1 = preprocess.stats_vis1(stats)
 tweets_vis1 = preprocess.tweets_vis1(tweets)
 start = datetime.strptime('2021-04-03', "%Y-%m-%d")
 end = datetime.strptime('2021-04-20', "%Y-%m-%d")
-
 vis_1 = vis1.maquette_1(stats_vis1, start, end)
 
-
-app = dash.Dash(__name__)
-app.title = "" #TBD
-
 data_3 = preprocess.stats_vis3(stats)
+df_stats = pd.read_csv('assets/df_stats.csv')
+df_tweets = pd.read_csv('assets/df_tweets.csv')
+
+df_stats = preprocess.convert_dates(df_stats)
+df_tweets = preprocess.convert_dates(df_tweets)
+
+radar_fig = radar.get_radar_figure(df_stats)
 
 app.layout = html.Div(className='content', children = [
     html.Header(children=[
@@ -80,9 +86,24 @@ app.layout = html.Div(className='content', children = [
                         id='vis_3',
                         figure=vis3.init_figure(data=data_3)
                     )
-                ], style={'width': '70%', 'display': 'inline-block'}),
-
+                ], style={'width': '60%', 'display': 'inline-block'}),
         ]),
+        html.Div(className='radar', children=[
+                        html.Div([
+                    dcc.Graph(
+                        id='radar-graph',
+                        className='graph',
+                        figure=radar_fig,
+                        config=dict(
+                            scrollZoom=False,
+                            showTips=False,
+                            showAxisDragHandles=False,
+                            doubleClick=False,
+                            displayModeBar=False
+                            )
+                        )]
+                            )
+        ])
         
     ])
 ])
