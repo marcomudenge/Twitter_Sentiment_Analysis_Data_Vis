@@ -5,7 +5,13 @@ import plotly.express as px
 import more_itertools as it
 from plotly.subplots import make_subplots
 
-def init_figure(data):
+import preprocess
+
+def init_bar_figure(data):
+
+    # preprocess data
+    data = preprocess.get_bar_chart_data(data)
+
     fig = go.Figure()
     # TODO : Update the template to include our new theme and set the title
     fig.update_layout(

@@ -6,29 +6,56 @@ import numpy as np
 import re
 
 
-def stats_vis1(stats):
+def get_main_vis_data(stats):
+    '''
+        Prepare the data for the main visualisation.
+
+        Args:
+            stats: The stats dataframe to process
+        Returns:
+            The data frame to use in the main visualisation
+            including the formatted columns index values and price 
+            variations and product.
+    '''   
+
+    # create a copy of the dataframe
     stats_copy = stats.copy(True)
+
+    # Calculate the variation of the index
     stats_copy['price_variation'] = stats_copy['price'].diff()
+
+    # Rename the 'sum_influence_3_days' column to 'Activity'
     stats_copy.rename(columns={'sum_influence_3_days':'Activity'}, inplace=True)
+
+    # Convert scale of the 'Activity' column from units to millions
     stats_copy['Activity']=(stats_copy['Activity']/1e6).round(1)
+
+    # Round the index value to 2 decimals
     stats_copy['index_value']=stats_copy['index_value'].round(2)
+
+    # Calculate the product of the price and index variation
     stats_copy['product'] = stats_copy['price_variation']*stats_copy['index_variation']
-    stats_copy.timestamp=pd.to_datetime(stats_copy.timestamp).dt.tz_localize(None)
+
     return stats_copy
 
-def tweets_vis1(tweets):
-    tweets.timestamp=pd.to_datetime(tweets.timestamp)
-    return tweets
-    
-    
-    
-def stats_vis3(stats):
+def get_bar_chart_data(stats):
+    '''
+        Prepare the data for the bar chart visualisation.
+
+        Args:
+            stats: The stats dataframe to process
+        Returns:
+            The data frame to use in the bar chart visualisation
+            with the formatted columns.
+    '''  
     # Split DF by index variation
+    # TODO : Review the values
     df1 = stats[stats['index_variation'] > 0.5]
     df2 = stats.loc[(stats['index_variation'] >= -0.5) & (stats['index_variation'] <= 0.5)]
     df3 = stats[stats['index_variation'] < -0.5]
 
     # Group by ranges and count for each range
+    # TODO : Can we use the same scale as in the main vis for the x axis? (6M instead of 60000000)
     ranges = [0, 2000000, 4000000, 6000000, 8000000, 10000000, 12000000, 14000000, 16000000, 18000000]
     upper_df = df1.groupby(pd.cut(df1.sum_influence_3_days, ranges)).size().reset_index(name="Count")
     middle_df = df2.groupby(pd.cut(df2.sum_influence_3_days, ranges)).size().reset_index(name="Count")
@@ -41,53 +68,6 @@ def stats_vis3(stats):
     merged = pd.concat([lower_df, middle_df, upper_df])
     merged['sum_influence_3_days'] = merged['sum_influence_3_days'].astype(str).str.replace(r'[][()]+', '', regex=True)
     return merged
-
-
-def convert_dates(df):
-    '''
-        Converts the dates in the dataframe to datetime objects.
-        Creates new columns for the month, day and time.
-        
-        Args:
-            dataframe: The dataframe to process
-        Returns:
-            The processed dataframe with datetime-formatted dates.
-    '''
-
-    df['timestamp'] = pd.to_datetime(df['timestamp'], format='%Y-%m-%d')
-    
-    return df
-
-
-def select_timeframe(df, start, end):
-    '''
-        Filters the elements of the dataframe by date, making sure
-        they fall in the desired range.
-
-        Args:
-            dataframe: The dataframe to process
-            start: The starting year (inclusive)
-            end: The ending year (inclusive)
-        Returns:
-            The dataframe filtered by date.
-    '''
-    # TODO: callbacks from the main viz to update the radar viz
-    df = df[(df['timestamp'] > pd.to_datetime(str(start))) 
-                & (df['timestamp'] < pd.to_datetime(str(end + 1)))]
-    return df
-
-def get_timeframe(df):
-    '''
-        Retrieve the earliest and latest dates in the dataframe.
-
-        Args:
-            dataframe: The dataframe to process
-        Returns:
-            The earliest (start) and latest (end) dates in the dataframe.
-    '''
-    start = df['timestamp'].min().strftime('%Y-%m-%d')
-    end = df['timestamp'].max().strftime('%Y-%m-%d')
-    return start,end
 
 def get_radar_trend_data(df_tweets):
     '''
@@ -166,3 +146,44 @@ def get_radar_scatter_data(df_tweets):
     scatter_data = scatter_data.loc[scatter_data['count'] != 0]
     
     return scatter_data
+
+def convert_dates(df):
+    '''
+        Converts the dates in the dataframe to datetime objects.
+        Creates new columns for the month, day and time.
+        
+        Args:
+            dataframe: The dataframe to process
+        Returns:
+            The processed dataframe with datetime-formatted dates.
+    '''
+    df['timestamp'] = pd.to_datetime(df['timestamp'], format='%Y-%m-%d').dt.tz_localize(None)
+    return df
+
+def select_timeframe(df, start, end):
+    '''
+        Filters the elements of the dataframe by date, making sure
+        they fall in the desired range.
+
+        Args:
+            dataframe: The dataframe to process
+            start: The starting year (inclusive)
+            end: The ending year (inclusive)
+        Returns:
+            The dataframe filtered by date.
+    '''
+    df = df[(df['timestamp']<= end ) & (df['timestamp']>= start)]
+    return df
+
+def get_timeframe(df):
+    '''
+        Retrieve the earliest and latest dates in the dataframe.
+
+        Args:
+            dataframe: The dataframe to process
+        Returns:
+            The earliest (start) and latest (end) dates in the dataframe.
+    '''
+    start = df['timestamp'].min().strftime('%Y-%m-%d')
+    end = df['timestamp'].max().strftime('%Y-%m-%d')
+    return start,end

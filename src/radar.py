@@ -11,7 +11,8 @@ import pandas as pd
 import preprocess
 import hover_template
 
-def get_radar_figure(data):
+def init_radar_figure(data):
+    # TODO : Can we add a figure for the avarage activity per hour (amount of tweets and/or followers)
 
     # Get the start and end dates for the title
     start, end = preprocess.get_timeframe(data)

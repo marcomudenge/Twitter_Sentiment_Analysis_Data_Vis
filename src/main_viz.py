@@ -5,6 +5,8 @@ from datetime import datetime, timedelta
 import more_itertools as it
 from plotly.subplots import make_subplots
 
+import preprocess
+
 def hover_line():
     return '%{x}</br></br> <b>Price :</b> %{y}'+'<extra></extra>'
 
@@ -18,18 +20,21 @@ def get_tweet(date):
     return: 
         2 tweet with the most follower
     '''
-    from app import tweets_vis1
+    from app import tweets
     date_obj = datetime.strptime(date, '%Y-%m-%d %H:%M')
     date_minus_3 = date_obj - timedelta(days=3)
     date_minus_3_str =  date_minus_3.strftime('%Y-%m-%d %H:%M')
     
-    mask= (tweets_vis1['timestamp']<= date ) & (tweets_vis1['timestamp']>= date_minus_3_str)
-    tweet = tweets_vis1[mask].sort_values(by = 'n_followers').head(2)['text'].values
+    mask= (tweets['timestamp']<= date ) & (tweets['timestamp']>= date_minus_3_str)
+    tweet = tweets[mask].sort_values(by = 'n_followers').head(2)['text'].values
     return tweet[0], tweet[1]
     
 
-def maquette_1(df, start_date = '2021-07-20', end_date = '2021-08-01'):
-    df = df[(df['timestamp']<= end_date ) & (df['timestamp']>= start_date)]
+def init_main_figure(df):
+
+    # preprocess data
+    df = preprocess.get_main_vis_data(df)
+
     # create coordinate  pairs
     x_pairs = it.pairwise(df['timestamp'].to_list())
     y_pairs = it.pairwise(df['product'].to_list())
