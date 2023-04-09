@@ -17,6 +17,7 @@ from datetime import date, datetime
 import plotly.graph_objects as go #move into viz files ?
 import preprocess
 import vis1
+import vis3
 import pandas as pd
 
 stats = pd.read_csv('assets/df_stats.csv')
@@ -29,8 +30,12 @@ end = datetime.strptime('2021-04-20', "%Y-%m-%d")
 vis_1 = vis1.maquette_1(stats_vis1, start, end)
 
 
+
+
 app = dash.Dash(__name__)
 app.title = "" #TBD
+
+data_3 = preprocess.stats_vis3(stats)
 
 app.layout = html.Div(className='content', children = [
     html.Header(children=[
@@ -70,7 +75,17 @@ app.layout = html.Div(className='content', children = [
                                 start_date=start,
                                 end_date=end
             )
-        ])
+        ]),
+        html.Div(className='viz3', children=[
+            html.Div([
+                    dcc.Graph(
+                        id='vis_3',
+                        figure=vis3.init_figure(data=data_3)
+                    )
+                ], style={'width': '70%', 'display': 'inline-block'}),
+
+        ]),
+        
     ])
 ])
 
