@@ -38,7 +38,7 @@ def init_radar_figure(data):
                                             ticks='inside',
                                             direction='clockwise'
                                             ),
-                            radialaxis = dict(
+                                radialaxis = dict(
                                             ticktext=[str(x) for x in np.arange(24)],
                                             showticklabels=True,
                                             ticks='',
@@ -47,7 +47,7 @@ def init_radar_figure(data):
                                             gridcolor='white',
                                             tickfont=dict(size=4)
                                             )),
-                template=None,
+                     template=None
                 )
 
     # Add dropdown
@@ -71,13 +71,16 @@ def init_radar_figure(data):
                 ]),
                 pad={"r": 10, "t": 10},
                 showactive=True,
-                x=0.59,
-                #xanchor="center",
-                y=-0.1,
-                #yanchor="top"
+                x=0.5,
+                xanchor="center",
+                y=-0.25,
+                yanchor="bottom"
             ),
         ],
-        legend = {"xanchor": "right", "x": 0}
+        #legend = {"xanchor": "left", "x": 0}
+        legend=dict(traceorder='normal',  # include legend within maximum width
+                    x=0.4,  # set x position of legend within plot
+                    )
     )
 
     return fig

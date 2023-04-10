@@ -47,27 +47,22 @@ def get_bar_chart_data(stats):
         Returns:
             The data frame to use in the bar chart visualisation
             with the formatted columns.
-    '''  
-    # Split DF by index variation
-    # TODO : Review the values
-    df1 = stats[stats['index_variation'] > 0.5]
-    df2 = stats.loc[(stats['index_variation'] >= -0.5) & (stats['index_variation'] <= 0.5)]
-    df3 = stats[stats['index_variation'] < -0.5]
+    ''' 
+    # Change the scale from units to millions
+#    stats['sum_influence_3_days']=(stats['sum_influence_3_days']/1e6)
 
-    # Group by ranges and count for each range
-    # TODO : Can we use the same scale as in the main vis for the x axis? (6M instead of 60000000)
-    ranges = [0, 2000000, 4000000, 6000000, 8000000, 10000000, 12000000, 14000000, 16000000, 18000000]
-    upper_df = df1.groupby(pd.cut(df1.sum_influence_3_days, ranges)).size().reset_index(name="Count")
-    middle_df = df2.groupby(pd.cut(df2.sum_influence_3_days, ranges)).size().reset_index(name="Count")
-    lower_df = df3.groupby(pd.cut(df3.sum_influence_3_days, ranges)).size().reset_index(name="Count")
+    # Split DF by index variation and range of sum_influence_3_days
+    stats['variation'] = stats['index_variation'].apply(lambda x: 
+                                                     'Bearish' if x < -0.025 else (
+                                                     'Bullish' if x > 0.025 else 'Neutral'))
 
-    lower_df['Variation'] = 'Bearish'
-    middle_df['Variation'] = 'Neutral'
-    upper_df['Variation'] = 'Bullish'
+    stats['sum_influence_3_days'] = pd.cut(stats['sum_influence_3_days'], np.arange(0, 18000001, 2000000))
+
+    bar_df = stats.groupby(['variation', 'sum_influence_3_days']).size().reset_index(name="Count")
     
-    merged = pd.concat([lower_df, middle_df, upper_df])
-    merged['sum_influence_3_days'] = merged['sum_influence_3_days'].astype(str).str.replace(r'[][()]+', '', regex=True)
-    return merged
+    # Format the sum_influence_3_days column
+    bar_df['sum_influence_3_days'] = bar_df['sum_influence_3_days'].astype(str).str.replace(r'[][()]+', '', regex=True)
+    return bar_df
 
 def get_radar_trend_data(df_tweets):
     '''
@@ -127,13 +122,16 @@ def get_radar_scatter_data(df_tweets):
     df['hour'] = df['timestamp'].dt.hour
     df['date'] = df['timestamp'].dt.date
 
+    # Keep only absolute values better reflect variation
+    df['index_variation'] = df['index_variation'].abs()
+
     # OPTIONAL : consider only variations greater than 0.1
-    df = df.loc[(df['index_variation'] > 0.01) | (df['index_variation'] < -0.01)]
+    df = df.loc[(df['index_variation'] > 0.03)]
 
     # Regroup by hour and index variation.
     # For instance, values 0.02 and 0.024 will be grouped together.
     # The index variations grouped for each interval of 0.01.
-    df['index_range'] = pd.cut(df['index_variation'], bins=[-0.55+i*0.01 for i in range(101)])
+    df['index_range'] = pd.cut(df['index_variation'], bins=[0+i*0.01 for i in range(101)])
     scatter_data = df.groupby(['hour', 'index_range']).size().reset_index(name='count')
 
     # Convert the hour to an angle

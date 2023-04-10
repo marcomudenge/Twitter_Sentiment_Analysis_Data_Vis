@@ -55,8 +55,7 @@ def init_main_figure(df):
         symbol = 'diamond',
         size=9,
         color='black',
-        opacity = 0.7,
-        
+        opacity = 0.7
     ))
     
     fig.add_trace(scatter, row=2, col=1)
@@ -79,8 +78,10 @@ def init_main_figure(df):
     
     fig.add_trace(bar_chart.data[0], row = 2, col=1)
     
-    fig.update_layout(coloraxis=bar_chart.layout.coloraxis, showlegend=False)
-    fig.update_yaxes(title_text='Price', row=1, col=1)
+    fig.update_layout(coloraxis=bar_chart.layout.coloraxis, showlegend=False,
+                      title={'text': "EUR/USD Price And Index charts"}   
+                      )
+    fig.update_yaxes(title_text='Price (EUR/USD)', row=1, col=1)
     fig.update_yaxes(title_text='Index', row=2, col=1)
     fig.update_traces(marker_line_width = 0,selector=dict(type="bar")) ### no space between bar, making the graph more visible with large range of x axis
     

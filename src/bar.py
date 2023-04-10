@@ -29,7 +29,12 @@ def init_bar_figure(data):
     fig.data = [] 
     ### ajout de hovertemplate pour prendre en compte l'info-bulle
     fig = px.bar(data, x='sum_influence_3_days', y='Count',
-            color='Variation',
-          height=400)
+                 color='variation',
+                 title='Distribution of activity',
+                 height=400)
+    
+    fig.update_layout(legend_title='Type of variation')
+    fig.update_xaxes(title='Activity (3-Days Influence)')
+    fig.update_yaxes(title='Count')
 
     return fig
