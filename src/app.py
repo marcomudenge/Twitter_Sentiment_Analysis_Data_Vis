@@ -25,8 +25,8 @@ app = dash.Dash(__name__)
 app.title = "" #TBD
 
 # Read CSV files
-stats = pd.read_csv('src/assets/df_stats.csv')
-tweets = pd.read_csv('src/assets/df_tweets.csv')
+stats = pd.read_csv('./assets/df_stats.csv')
+tweets = pd.read_csv('./assets/df_tweets.csv')
 
 # Preprocess data
 stats = preprocess.convert_dates(stats)
@@ -77,31 +77,12 @@ app.layout = html.Div(className='content', children = [
                             'border': '1px solid black',
                             'border-radius': '10px'})
         ]),
-        html.Div(className='bar_vis', children=[
-            html.Div([
-                    dcc.Graph(
-                        id='bar_vis',
-                        figure=bar.init_bar_figure(stats)
-                    )
-                ], style={'width': '60%', 'display': 'inline-block'}),
+        dcc.Tabs(id='viz_selection', value='viz-2', children=[
+            dcc.Tab(label='afficher viz 2', value='viz-2'), # TODO : decide what we display in the labels
+            dcc.Tab(label='afficher viz 3', value='viz-3')
         ]),
-        # TODO : Can we make the radar chart bigger and remove the gap between the radar and the chart?
-        html.Div(className='radar_vis', children=[
-            html.Div([
-                dcc.Graph(
-                    id='radar_vis',
-                    figure=radar.init_radar_figure(stats),
-                    config=dict(
-                        scrollZoom=True,
-                        showTips=True,
-                        showAxisDragHandles=True,
-                        doubleClick=False,
-                        displayModeBar=True
-                        )
-                    )]
-                )
-        ])
-        
+
+        html.Div(id='viz_to_display', children=[]), # rendered in the callback associated to the tabs
     ])
 ])
 
@@ -152,3 +133,35 @@ def update_figures(start_date, end_date):
     radar_fig = radar.init_radar_figure(df)
 
     return main_fig, bar_fig, radar_fig
+
+@app.callback(
+    Output('viz_to_display', 'children'),
+    Input('viz_selection', 'value')
+)
+def select_viz(tab):
+    if tab == 'viz-2':
+        return html.Div(id='bar_vis', children=[
+            html.Div([
+                    dcc.Graph(
+                        id='bar_vis_graph',
+                        figure=bar.init_bar_figure(stats)
+                    )
+                ], style={'width': '60%', 'display': 'inline-block'}),
+        ])
+    else:
+        # TODO : Can we make the radar chart bigger and remove the gap between the radar and the chart?
+        return html.Div(id='radar_vis', children=[
+            html.Div([
+                dcc.Graph(
+                    id='radar_vis_graph',
+                    figure=radar.init_radar_figure(stats),
+                    config=dict(
+                        scrollZoom=True,
+                        showTips=True,
+                        showAxisDragHandles=True,
+                        doubleClick=False,
+                        displayModeBar=True
+                        )
+                    )]
+                )
+        ])
