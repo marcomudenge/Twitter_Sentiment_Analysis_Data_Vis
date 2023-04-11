@@ -27,8 +27,8 @@ app = dash.Dash(__name__)
 app.title = "" #TBD
 
 # Read CSV files
-stats = pd.read_csv('./assets/df_stats.csv')
-tweets = pd.read_csv('./assets/df_tweets.csv')
+stats = pd.read_csv('src/assets/df_stats.csv')
+tweets = pd.read_csv('src/assets/df_tweets.csv')
 
 # Preprocess data
 stats = preprocess.convert_dates(stats)
