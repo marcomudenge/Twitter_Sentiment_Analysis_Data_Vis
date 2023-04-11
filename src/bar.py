@@ -34,7 +34,7 @@ def init_bar_figure(data):
                  height=400)
     
     fig.update_layout(legend_title='Type of variation')
-    fig.update_xaxes(title='Activity (3-Days Influence)')
+    fig.update_xaxes(title='Activity in millions of following (3-Days Influence)')
     fig.update_yaxes(title='Count')
 
     return fig
