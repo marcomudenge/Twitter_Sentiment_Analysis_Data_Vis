@@ -56,12 +56,12 @@ def get_bar_chart_data(stats):
                                                      'Bearish' if x < -0.025 else (
                                                      'Bullish' if x > 0.025 else 'Neutral'))
 
-    stats['sum_influence_3_days'] = pd.cut(stats['sum_influence_3_days'], np.arange(0, 18000001, 2000000))
+    stats['sum_influence_3_days_bins'] = pd.cut(stats['sum_influence_3_days'], bins = np.arange(0, 18000001, 2000000))
 
-    bar_df = stats.groupby(['variation', 'sum_influence_3_days']).size().reset_index(name="Count")
+    bar_df = stats.groupby(['variation', 'sum_influence_3_days_bins']).size().reset_index(name="Count")
     
     # Format the sum_influence_3_days column
-    bar_df['sum_influence_3_days'] = bar_df['sum_influence_3_days'].astype(str).str.replace(r'[][()]+', '', regex=True)
+    bar_df['sum_influence_3_days'] = bar_df['sum_influence_3_days_bins'].astype(str).str.replace(r'[][()]+', '', regex=True)
     return bar_df
 
 def get_radar_trend_data(df_tweets):
