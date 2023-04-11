@@ -19,24 +19,24 @@ def get_main_vis_data(stats):
     '''   
 
     # create a copy of the dataframe
-    stats_copy = stats.copy(True)
+    df = stats.loc[:, ["price","sum_influence_3_days", "index_value", "index_variation", "timestamp", "high_variation"]]
 
     # Calculate the variation of the index
-    stats_copy['price_variation'] = stats_copy['price'].diff()
+    df['price_variation'] = df['price'].diff()
 
     # Rename the 'sum_influence_3_days' column to 'Activity'
-    stats_copy.rename(columns={'sum_influence_3_days':'Activity'}, inplace=True)
+    df.rename(columns={'sum_influence_3_days':'Activity'}, inplace=True)
 
     # Convert scale of the 'Activity' column from units to millions
-    stats_copy['Activity']=(stats_copy['Activity']/1e6).round(1)
+    df['Activity']=(df['Activity']/1e6).round(1)
 
     # Round the index value to 2 decimals
-    stats_copy['index_value']=stats_copy['index_value'].round(2)
+    df['index_value']=df['index_value'].round(2)
 
     # Calculate the product of the price and index variation
-    stats_copy['product'] = stats_copy['price_variation']*stats_copy['index_variation']
+    df['product'] = df['price_variation']*df['index_variation']
 
-    return stats_copy
+    return df
 
 def get_bar_chart_data(stats):
     '''
@@ -48,23 +48,25 @@ def get_bar_chart_data(stats):
             The data frame to use in the bar chart visualisation
             with the formatted columns.
     ''' 
-    # Change the scale from units to millions
-#    stats['sum_influence_3_days']=(stats['sum_influence_3_days']/1e6)
+    # Only keep relevant columns
+    df = stats.loc[:, ["price","sum_influence_3_days", "index_value", "index_variation"]]
+
+    df['sum_influence_3_days']=(df['sum_influence_3_days']/1e6)
 
     # Split DF by index variation and range of sum_influence_3_days
-    stats['variation'] = stats['index_variation'].apply(lambda x: 
+    df['variation'] = df['index_variation'].apply(lambda x: 
                                                      'Bearish' if x < -0.025 else (
                                                      'Bullish' if x > 0.025 else 'Neutral'))
 
-    stats['sum_influence_3_days_bins'] = pd.cut(stats['sum_influence_3_days'], bins = np.arange(0, 18000001, 2000000))
+    df['sum_influence_3_days'] = pd.cut(df['sum_influence_3_days'], np.arange(0, 19, 2))
 
-    bar_df = stats.groupby(['variation', 'sum_influence_3_days_bins']).size().reset_index(name="Count")
+    bar_df = df.groupby(['variation', 'sum_influence_3_days']).size().reset_index(name="Count")
     
-    # Format the sum_influence_3_days column
-    bar_df['sum_influence_3_days'] = bar_df['sum_influence_3_days_bins'].astype(str).str.replace(r'[][()]+', '', regex=True)
+    # Change format of sum_influence_3_days column from (a, b] to a M - b M
+    bar_df['sum_influence_3_days'] = bar_df['sum_influence_3_days'].astype(str).replace(r'\((\d+), (\d+)\]', r'\1 - \2', regex=True)
     return bar_df
 
-def get_radar_trend_data(df_tweets):
+def get_radar_trend_data(tweets):
     '''
         From the given tweets dataframe, get
         the average variation for each hour.
@@ -77,33 +79,33 @@ def get_radar_trend_data(df_tweets):
     '''
 
     # Only keep relevant columns
-    mean_df = df_tweets.loc[:, ["timestamp", "index_variation"]]
+    df = tweets.loc[:, ["timestamp", "index_variation"]]
 
     # Convert the hours from the timestamp
-    mean_df['hour'] = mean_df['timestamp'].dt.hour
+    df['hour'] = df['timestamp'].dt.hour
 
     # Keep only absolute values reflect movement
-    mean_df['index_variation'] = mean_df['index_variation'].abs()
+    df['index_variation'] = df['index_variation'].abs()
 
     # Get the average variation for each hour
-    mean_df = mean_df.groupby('hour')['index_variation'].mean().reset_index()
+    df = df.groupby('hour')['index_variation'].mean().reset_index()
 
     # Convert the hour to an angle
-    mean_df['hour_angle'] = mean_df['hour'] * 15
+    df['hour_angle'] = df['hour'] * 15
 
     # Check if there are any missing hours
-    missing_hours = [i for i in range(25) if i not in mean_df['hour'].unique()]
+    missing_hours = [i for i in range(25) if i not in df['hour'].unique()]
 
     # If there are missing hours, add them to the dataframe
     if 24 in missing_hours and 0 not in missing_hours:
         missing_hours_df = pd.DataFrame({'hour': 0, 
                                          'hour_angle': 0,
-                                         'index_variation': mean_df.loc[mean_df['hour'] == 0]['index_variation']})
-        mean_df = pd.concat([mean_df, missing_hours_df], ignore_index=True)
+                                         'index_variation': df.loc[df['hour'] == 0]['index_variation']})
+        df = pd.concat([df, missing_hours_df], ignore_index=True)
 
-    return mean_df
+    return df
 
-def get_radar_scatter_data(df_tweets):
+def get_radar_scatter_data(tweets):
     '''
         From the given tweets dataframe, get scatter data
         for each non-negligeable variations per hour.
@@ -116,7 +118,7 @@ def get_radar_scatter_data(df_tweets):
     '''   
 
     # Only keep relevant columns
-    df = df_tweets.loc[:, ["timestamp","index_variation"]]
+    df = tweets.loc[:, ["timestamp","index_variation"]]
 
     # Convert the timestamp
     df['hour'] = df['timestamp'].dt.hour
@@ -132,18 +134,18 @@ def get_radar_scatter_data(df_tweets):
     # For instance, values 0.02 and 0.024 will be grouped together.
     # The index variations grouped for each interval of 0.01.
     df['index_range'] = pd.cut(df['index_variation'], bins=[0+i*0.01 for i in range(101)])
-    scatter_data = df.groupby(['hour', 'index_range']).size().reset_index(name='count')
+    scatter_df = df.groupby(['hour', 'index_range']).size().reset_index(name='count')
 
     # Convert the hour to an angle
-    scatter_data['hour_angle'] = scatter_data['hour'] * 15
+    scatter_df['hour_angle'] = scatter_df['hour'] * 15
 
     # Give a name to each interval
-    scatter_data['variation'] = scatter_data['index_range'].apply(lambda x: x.left)
+    scatter_df['variation'] = scatter_df['index_range'].apply(lambda x: x.left)
 
     # Remove the intervals with no data points
-    scatter_data = scatter_data.loc[scatter_data['count'] != 0]
+    scatter_df = scatter_df.loc[scatter_df['count'] != 0]
     
-    return scatter_data
+    return scatter_df
 
 def convert_dates(df):
     '''
