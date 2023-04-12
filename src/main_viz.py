@@ -73,7 +73,7 @@ def init_main_figure(df):
         )
     
     ### build the bar chart
-    bar_chart = px.bar(df, x='timestamp', y='index_value', color='Activity', color_continuous_scale='YlGnBu')
+    bar_chart = px.bar(df, x='timestamp', y='index_value', color='Activity', color_continuous_scale='Blues')
     bar_chart.update_traces(hovertemplate=hover_bar())
     
     fig.add_trace(bar_chart.data[0], row = 2, col=1)
@@ -84,6 +84,7 @@ def init_main_figure(df):
     fig.update_yaxes(title_text='Price (EUR/USD)', row=1, col=1)
     fig.update_yaxes(title_text='Index', row=2, col=1)
     fig.update_traces(marker_line_width = 0,selector=dict(type="bar")) ### no space between bar, making the graph more visible with large range of x axis
+    fig.update_layout(plot_bgcolor='#F0F0F0')
     
     return fig
 

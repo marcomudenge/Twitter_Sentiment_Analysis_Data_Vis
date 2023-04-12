@@ -34,7 +34,8 @@ def get_main_vis_data(stats):
     df['index_value']=df['index_value'].round(2)
 
     # Calculate the product of the price and index variation
-    df['product'] = df['price_variation']*df['index_variation']
+    rolling_mean = df[['price_variation', 'index_variation']].rolling(window=12).mean()
+    df['product'] = rolling_mean['price_variation']*rolling_mean['index_variation']
 
     return df
 

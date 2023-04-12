@@ -27,8 +27,8 @@ app = dash.Dash(__name__)
 app.title = "" #TBD
 
 # Read CSV files
-stats = pd.read_csv('src/assets/df_stats.csv')
-tweets = pd.read_csv('src/assets/df_tweets.csv')
+stats = pd.read_csv('assets/df_stats.csv')
+tweets = pd.read_csv('assets/df_tweets.csv')
 
 # Preprocess data
 stats = preprocess.convert_dates(stats)
@@ -112,12 +112,12 @@ app.layout = html.Div(className='content', children = [
                                                 ], style=tweets_header_style),
                                             ]),
                                             html.Div([
-                                                html.P("EXPLANATIONS. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."),
+                                                html.P("The price line is green when the variation of the price and the index goes in the same direction, red otherwise. The activity colorscale represent the sum of tweets weights by the number of followers."),
                                                 html.Div(className='bandeau_dessous', children=[
                                                     html.Div(className='selecteur_viz', children=[
                                                         None
                                                     ]),
-                                                    dcc.DatePickerRange(id='my-date-picker-range',  #selecteur de date pour la viz 4
+                                                    dcc.DatePickerRange(id='my-date-picker-range',  
                                                                         min_date_allowed=start,
                                                                         max_date_allowed=end,
                                                                         start_date=start,
@@ -143,23 +143,14 @@ app.layout = html.Div(className='content', children = [
                                                                             html.Div(id='index_var', style={
                                                                                 'fontSize': '20px',"margin-top": "6px"}),
                                                                             html.Div(id='tweet_row', style={
-                                                                                'fontSize': '16px'})])]
+                                                                                'fontSize': '20px'})])]
                                                             ,style={'width': '23%',
                                                                     'display': 'inline-block',
                                                                     'vertical-align': 'top',
                                                                     'padding': '10px',
                                                                     'border': '1px solid black',
                                                                     'border-radius': '10px'})
-                                                ]),
-                                                dbc.Col([
-                                                    html.Div([
-                                                        html.Span("❤️", style={'margin-right':'10px'}),
-                                                        html.Span("10", style={'margin-right':'10px'}),
-                                                        html.Span("\U0001F4AC", style={'margin-right':'10px'}),
-                                                        html.Span("5", style={'margin-right':'10px'}),
-                                                        html.Span("10:30 AM - 11 Apr 2023", style={'color':'gray'}),
-                                                    ], style={'display':'inline-block', 'vertical-align':'top'}),
-                                                ]),               
+                                                ]),            
                                             ], style=graph_box_style)
                                         ], style=tweets_style),
                                     ]),
@@ -327,7 +318,7 @@ def display_tweet(click, cur_tweet, cur_index, cur_date):
     # TODO : Can we hide the panel if a marker is not yet clicked ?
     ctx = dash.callback_context
     if not ctx.triggered:
-        return [], [], []
+        return [], [], ['Click on a dark marker to see more information about the tweet that lead to high index variation']
     
     if (ctx.triggered[0]['prop_id'].split('.')[0]=='main_vis') & (ctx.triggered[0]['value']['points'][0]['curveNumber'] == 0):
         date =  ctx.triggered[0]['value']['points'][0]['x'] 
