@@ -28,12 +28,10 @@ def get_radar_scatter_hover_template():
     '''
 
     # TODO: Indicate the amount of time the variation has occured
-    hov = '<span style="font-weight:bold;">Time : </span>'+\
-          '<span style="font-weight:normal;">%{theta}:00</span>'   +\
-          '<span style="font-weight:bold;"><br>variation : </span>'+\
-          '<span style="font-weight:normal;">%{r}</span>'   +\
-          '<span style="font-weight:bold;"><br>Occurences : </span>'+\
-          '<span style="font-weight:normal;">%{color} times</span>'   +\
-              '<extra></extra>'
+    hov = '<span style="font-weight:bold;">Time : </span>' +\
+          '<span style="font-weight:normal;">%{theta}:00</span>' +\
+          '<span style="font-weight:bold;"><br>variation : </span>' +\
+          '<span style="font-weight:normal;">%{r}</span>' +\
+          '<extra></extra>'
     
     return hov

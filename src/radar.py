@@ -47,7 +47,7 @@ def init_radar_figure(data):
                                             gridcolor='white',
                                             tickfont=dict(size=4)
                                             )),
-                     template=None
+                     template=None,
                 )
 
     # Add dropdown
@@ -90,15 +90,20 @@ def add_radar_scatter_figure(fig, scatter_data):
     scatter = go.Scatterpolar(r=scatter_data["variation"], theta=scatter_data["hour_angle"], 
                               mode='markers',
                               marker=dict(color=scatter_data["count"],
-                                          colorscale='Viridis',
+                                          colorscale='Blugrn',
                                           colorbar=dict(title="Frequency"),
-                                          showscale=True),
+                                          showscale=True,
+                                          # reversescale=True,
+                                          ),
                               hovertemplate=hover_template.get_radar_scatter_hover_template(),
                               visible=False)
 
+    fig.update_polars(
+        bgcolor='#F0F0F0'
+    )
     fig.add_trace(scatter)
-
     return fig
+
 
 def add_radar_trend_figure(fig, mean_df):
 
