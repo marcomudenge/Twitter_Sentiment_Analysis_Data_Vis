@@ -90,14 +90,7 @@ app.layout = html.Div(className='content', children = [
                                                 ], style=tweets_header_style),
                                             ]),
                                             html.Div([
-                                                html.P("INTRODUCTION HERE. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."),
-                                                dbc.Col([
-                                                    html.Div([
-                                                        html.Span("\U0001F4AC", style={'margin-right':'10px'}),
-                                                        html.Span("3", style={'margin-right':'10px'}),
-                                                        html.Span("10:30 AM - 11 Apr 2023", style={'color':'gray'}),
-                                                    ], style={'display':'inline-block', 'vertical-align':'top'}),
-                                                ]),               
+                                                html.P("INTRODUCTION HERE. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."),               
                                             ], style=graph_box_style)
                                         ], style=tweets_style),                                  
                                     ]),
@@ -112,7 +105,7 @@ app.layout = html.Div(className='content', children = [
                                                 ], style=tweets_header_style),
                                             ]),
                                             html.Div([
-                                                html.P("The price line is green when the variation of the price and the index goes in the same direction, red otherwise. The activity colorscale represent the sum of tweets weights by the number of followers."),
+                                                html.P("The price line is green when the variation of the price and the index goes in the same direction, red otherwise. The activity colorscale represent the sum of tweets weighted by the number of followers, the unit of the activity is million of followers"),
                                                 html.Div(className='bandeau_dessous', children=[
                                                     html.Div(className='selecteur_viz', children=[
                                                         None
@@ -166,13 +159,7 @@ app.layout = html.Div(className='content', children = [
                                             ]),
                                             html.Div([
                                                 html.P("Some more explanations. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."),
-                                                dbc.Col([
-                                                    html.Div([
-                                                        html.Span("\U0001F4AC", style={'margin-right':'10px'}),
-                                                        html.Span("1", style={'margin-right':'10px'}),
-                                                        html.Span("10:30 AM - 11 Apr 2023", style={'color':'gray'}),
-                                                    ], style={'display':'inline-block', 'vertical-align':'top'}),
-                                                ]),               
+              
                                             ], style=graph_box_style)
                                         ], style=tweets_style),                                  
                                     ]),
@@ -198,9 +185,6 @@ app.layout = html.Div(className='content', children = [
                                                 ]),
                                                 dbc.Col([
                                                     html.Div([
-                                                        html.Span("❤️ ", style={'margin-right':'10px'}),
-                                                        html.Span("10", style={'margin-right':'10px'}),
-                                                        html.Span("10:30 AM - 11 Apr 2023", style={'color':'gray'}),
                                                     ], style={'display':'inline-block', 'vertical-align':'top'}),
                                                 ]),               
                                             ], style=graph_box_style)
@@ -226,15 +210,6 @@ app.layout = html.Div(className='content', children = [
                                                             )]
                                                         )
                                                 ]),
-                                                dbc.Col([
-                                                    html.Div([
-                                                        html.Span("❤️ ", style={'margin-right':'10px'}),
-                                                        html.Span("4", style={'margin-right':'10px'}),
-                                                        html.Span("\U0001F4AC", style={'margin-right':'10px'}),
-                                                        html.Span("3", style={'margin-right':'10px'}),
-                                                        html.Span("10:30 AM - 11 Apr 2023", style={'color':'gray'}),
-                                                    ], style={'display':'inline-block', 'vertical-align':'top'}),
-                                                ]),               
                                             ], style=graph_box_style)
                                         ], style=tweets_style),     
                                     ]),
@@ -249,14 +224,7 @@ app.layout = html.Div(className='content', children = [
                                                 ], style=tweets_header_style),
                                             ]),
                                             html.Div([
-                                                html.P("CLOSING. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."),
-                                                dbc.Col([
-                                                    html.Div([
-                                                        html.Span("\U0001F4AC", style={'margin-right':'10px'}),
-                                                        html.Span("3", style={'margin-right':'10px'}),
-                                                        html.Span("10:30 AM - 11 Apr 2023", style={'color':'gray'}),
-                                                    ], style={'display':'inline-block', 'vertical-align':'top'}),
-                                                ]),               
+                                                html.P("CLOSING. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."),               
                                             ], style=graph_box_style)
                                         ], style=tweets_style),                                  
                                     ]),
