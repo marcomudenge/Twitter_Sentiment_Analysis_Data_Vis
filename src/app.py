@@ -203,7 +203,7 @@ app.layout = html.Div(className='content', children = [
                                                                 id='bar_vis',
                                                                 figure=bar.init_bar_figure(stats)
                                                             )
-                                                        ], style={'display': 'inline-block'}),
+                                                        ], style={'display': 'flex', 'justify-content': 'center'}),
                                                 ])             
                                             ], style=graph_box_style)
                                         ], style=tweets_style),
