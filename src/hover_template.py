@@ -37,3 +37,9 @@ def get_radar_scatter_hover_template():
               '<extra></extra>'
     
     return hov
+
+def get_barchart_hover_template():
+    hov = '<span style="font-weight:bold;">Nombre de tweets : %{y} </span>'  + '</br></br>'
+    fol=  '<span style="font-weight:bold;"> Intervalle de followers : %{x} millions</span>'
+    return hov + fol + '<extra></extra>'
+          
