@@ -51,7 +51,7 @@ app.layout = html.Div(className='content', children = [
                     html.Div([
                             html.H1(username, style={'font-size': '20','margin-top' : '20px','margin-bottom': '10px', 'margin-left' : '25px', 'color': 'black'}),
                             html.P(account, style={'font-size': '14','margin-bottom': '10px', 'margin-left' : '25px', 'color': 'gray'}),
-                            html.P('Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\n Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut ', 
+                            html.P("Welcome to Team 16's website! In this page, you will find various data visualizations and information on tweets related to the EUR/USD currency pair.", 
                                     style={'font-size': '18','margin-bottom': '10px', 'margin-left' : '25px', 'color': 'gray'}),
                             html.Div([
                                 html.Span(" "),
@@ -94,7 +94,7 @@ app.layout = html.Div(className='content', children = [
                                                 ], style=tweets_header_style),
                                             ]),
                                             html.Div([
-                                                html.P("INTRODUCTION HERE. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."),               
+                                                html.P("Introduction here"),               
                                             ], style=graph_box_style)
                                         ], style=tweets_style),                                  
                                     ]),
