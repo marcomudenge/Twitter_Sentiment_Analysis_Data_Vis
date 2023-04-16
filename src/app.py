@@ -23,7 +23,7 @@ from style import *
 import radar
 import pandas as pd
 
-app = dash.Dash(__name__)
+app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 app.title = "" #TBD
 
 # Read CSV files
@@ -36,27 +36,30 @@ tweets = preprocess.convert_dates(tweets)
 start,end = preprocess.get_timeframe(stats)
 
 app.layout = html.Div(className='content', children = [
-        dbc.Row([
-            dbc.Col(
-                html.Div(
-                    html.Img(src=profile_image, style={'borderRadius': '50%','height': '200px', 'width': '200px'} ),
-                    style={"textAlign": "center","borderRadius": "50%","backgroundColor": "lightgray","height": "200px", "width": "200px","margin-top": "35px", 'margin-left': '25px'},
-                ),
-                md=3,
+        html.Div([
+            dbc.Row(
+                dbc.Col(
+                    html.Div(
+                        html.Img(src=profile_image, style={'borderRadius': '50%','height': '100%', 'width': '100%'} ),
+                        style={"textAlign": "center","borderRadius": "50%","backgroundColor": "lightgray","height": "100%", "width": "100%",},#"margin-top": "35px", 'margin-left': '25px'},
+                    ),
+                    width={'size': 2, 'offset':1},),
             ),
-            dbc.Col(
-                html.Div([
-                        html.H1(username, style={'font-size': '20','margin-top' : '20px','margin-bottom': '10px', 'margin-left' : '25px', 'color': 'black'}),
-                        html.P(account, style={'font-size': '14','margin-bottom': '10px', 'margin-left' : '25px', 'color': 'lightgray'}),
-                        html.P('Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\n Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut ', 
-                                style={'font-size': '18','margin-bottom': '10px', 'margin-left' : '25px', 'color': 'gray'}),
-                        html.Div([
-                            html.Span(" "),
-                            html.Span("12.6M Followers", style={'margin-left' : '25px', 'margin-top' : '35px', 'Font-Weight': 'bold',}),
-                            html.Span("1.2K Following", style={'margin-left' : '25px', 'margin-top' : '35px', 'Font-Weight': 'bold'}),
-                        ]),
-                ]),
-                md=2,
+            dbc.Row(
+                dbc.Col(
+                    html.Div([
+                            html.H1(username, style={'font-size': '20','margin-top' : '20px','margin-bottom': '10px', 'margin-left' : '25px', 'color': 'black'}),
+                            html.P(account, style={'font-size': '14','margin-bottom': '10px', 'margin-left' : '25px', 'color': 'gray'}),
+                            html.P('Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\n Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut ', 
+                                    style={'font-size': '18','margin-bottom': '10px', 'margin-left' : '25px', 'color': 'gray'}),
+                            html.Div([
+                                html.Span(" "),
+                                html.Span("12.6M Followers", style={'margin-left' : '25px', 'margin-top' : '35px', 'Font-Weight': 'bold',}),
+                                html.Span("1.2K Following", style={'margin-left' : '25px', 'margin-top' : '35px', 'Font-Weight': 'bold'}),
+                            ]),
+                    ]),
+                    width=11),
+                justify='center'
             ),
 #                dbc.Col(
 #                    html.Div(
@@ -100,6 +103,28 @@ app.layout = html.Div(className='content', children = [
                                                 html.Img(src=profile_image, 
                                                         style={'height':'50px','width':'50px','border-radius':'50%'}),
                                                 html.Div([
+                                                    html.H5(username, style={'margin':'0px','font-size': '16'}),
+                                                    html.Span(account, style={'color':'gray'})
+                                                ], style=tweets_header_style),
+                                            ]),
+                                            html.Div([
+                                                html.P("Choose the date range of the data to be displayed in the visualisations below using this calendar."), 
+                                                dcc.DatePickerRange(id='my-date-picker-range',  
+                                                    min_date_allowed=start,
+                                                    max_date_allowed=end,
+                                                    start_date=start,
+                                                    end_date=end
+                                                ),
+                                            #    html.P("You can also change the date range using drag-and-drop on the horizontal axis of the first visualisation.") #to implement + add some padding w/ calendar above
+                                            ], style=graph_box_style)
+                                        ], style=tweets_style),                                  
+                                    ]),
+                                    dbc.Row([
+                                        dbc.Col([
+                                            html.Div([
+                                                html.Img(src=profile_image, 
+                                                        style={'height':'50px','width':'50px','border-radius':'50%'}),
+                                                html.Div([
                                                     html.H5(username, style={'margin':'0px'}),
                                                     html.Span(account, style={'color':'gray'})
                                                 ], style=tweets_header_style),
@@ -110,12 +135,6 @@ app.layout = html.Div(className='content', children = [
                                                     html.Div(className='selecteur_viz', children=[
                                                         None
                                                     ]),
-                                                    dcc.DatePickerRange(id='my-date-picker-range',  
-                                                                        min_date_allowed=start,
-                                                                        max_date_allowed=end,
-                                                                        start_date=start,
-                                                                        end_date=end
-                                                    )
                                                 ]),
                                                 html.Div(className='main_vis', children=[
                                                     html.Div([
@@ -129,7 +148,7 @@ app.layout = html.Div(className='content', children = [
                                                             children=[
                                                                 html.Div(id='panel',
                                                                         children=[
-                                                                            html.Div(['Influencial tweets'], style={
+                                                                            html.Div(['Influential tweets'], style={
                                                                                 'fontSize': '24px'}),
                                                                             html.Div(id='date_row', style={
                                                                                 'fontSize': '20px',"margin-top": "6px"}),
