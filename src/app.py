@@ -196,7 +196,7 @@ app.layout = html.Div(className='content', children = [
                                                 ], style=tweets_header_style),
                                             ]),
                                             html.Div([
-                                                html.P("Explanations.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."),
+                                                html.P("This stacked bar chart illustrates the number of tweets for each type of variation. The variation can be either bullish, neutral or bearish. The activity is equivalent to the sum of the tweet author's following count in the past 3 days (from the date of the tweet). Each bar in the visualization is associated to a 2M activity interval."),
                                                 html.Div(className='bar_vis', children=[
                                                     html.Div([
                                                             dcc.Graph(
