@@ -26,8 +26,8 @@ def get_tweet(date):
     date_minus_3_str =  date_minus_3.strftime('%Y-%m-%d %H:%M')
     
     mask= (tweets['timestamp']<= date ) & (tweets['timestamp']>= date_minus_3_str)
-    tweet = tweets[mask].sort_values(by = 'n_followers').head(2)['text'].values
-    return tweet[0], tweet[1]
+    tweet = tweets[mask].sort_values(by = 'n_followers').head(3)['text'].str.replace(r'\bhttps?:/\S+', '', regex=True).values
+    return tweet[0], tweet[1], tweet[2]
     
 
 def init_main_figure(df):

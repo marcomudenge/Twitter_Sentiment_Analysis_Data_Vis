@@ -15,7 +15,7 @@ def init_radar_figure(data):
     # TODO : Can we add a figure for the avarage activity per hour (amount of tweets and/or followers)
 
     # Get the start and end dates for the title
-    start, end = preprocess.get_timeframe(data)
+    start, end,_ = preprocess.get_timeframe(data)
 
     # prepare the avarage data set
     mean_df = preprocess.get_radar_trend_data(data)

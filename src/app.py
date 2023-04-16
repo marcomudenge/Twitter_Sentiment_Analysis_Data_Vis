@@ -33,7 +33,7 @@ tweets = pd.read_csv('assets/df_tweets.csv')
 # Preprocess data
 stats = preprocess.convert_dates(stats)
 tweets = preprocess.convert_dates(tweets)
-start,end = preprocess.get_timeframe(stats)
+start,end,display = preprocess.get_timeframe(stats)
 
 app.layout = html.Div(className='content', children = [
         html.Div([
@@ -113,7 +113,7 @@ app.layout = html.Div(className='content', children = [
                                                     min_date_allowed=start,
                                                     max_date_allowed=end,
                                                     start_date=start,
-                                                    end_date=end
+                                                    end_date=display
                                                 ),
                                             #    html.P("You can also change the date range using drag-and-drop on the horizontal axis of the first visualisation.") #to implement + add some padding w/ calendar above
                                             ], style=graph_box_style)
@@ -130,7 +130,7 @@ app.layout = html.Div(className='content', children = [
                                                 ], style=tweets_header_style),
                                             ]),
                                             html.Div([
-                                                html.P("The price line is green when the variation of the price and the index goes in the same direction, red otherwise. The activity colorscale represent the sum of tweets weighted by the number of followers, the unit of the activity is million of followers"),
+                                                html.P("The price line is green when the variation of the price and the index goes in the same direction, red otherwise. The activity colorscale represent the sum of tweets weighted by the number of followers, the unit of the activity is million of followers. The tweet displayed are the 3 tweets with the most audience (number of follower) tweeted the day before the high index variation."),
                                                 html.Div(className='bandeau_dessous', children=[
                                                     html.Div(className='selecteur_viz', children=[
                                                         None
@@ -140,7 +140,7 @@ app.layout = html.Div(className='content', children = [
                                                     html.Div([
                                                             dcc.Graph(
                                                                 id='main_vis',
-                                                                figure=main_viz.init_main_figure(stats)
+                                                                figure=main_viz.init_main_figure(preprocess.select_timeframe(stats, start, display))
                                                             )
                                                         ], style={'width': '75%', 'display': 'inline-block'}),
 
@@ -155,7 +155,7 @@ app.layout = html.Div(className='content', children = [
                                                                             html.Div(id='index_var', style={
                                                                                 'fontSize': '20px',"margin-top": "6px"}),
                                                                             html.Div(id='tweet_row', style={
-                                                                                'fontSize': '20px'})])]
+                                                                                'fontSize': '18px',"margin-top": "6px"})])]
                                                             ,style={'width': '23%',
                                                                     'display': 'inline-block',
                                                                     'vertical-align': 'top',
@@ -309,11 +309,12 @@ def display_tweet(click, cur_tweet, cur_index, cur_date):
     
     if (ctx.triggered[0]['prop_id'].split('.')[0]=='main_vis') & (ctx.triggered[0]['value']['points'][0]['curveNumber'] == 0):
         date =  ctx.triggered[0]['value']['points'][0]['x'] 
-        tweet1, tweet2 = main_viz.get_tweet(date)
+        tweet1, tweet2, tweet3 = main_viz.get_tweet(date)
         
         output1 = html.Div([
                     html.P(tweet1),
-                    html.P(tweet2, style={'margin-top': '0px', 'padding-top': '0px'})
+                    html.P(tweet2, style={'margin-top': '0px', 'padding-top': '0px'}),
+                    html.P(tweet3, style={'margin-top': '0px', 'padding-top': '0px'})
                 ], style={'line-height': '80%'})
         index_variation = stats[stats['timestamp']==date]['index_variation'].round(2).values[0]
         output2 = f'Index variation : {index_variation}'

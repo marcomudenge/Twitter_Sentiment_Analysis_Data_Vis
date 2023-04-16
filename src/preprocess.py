@@ -4,6 +4,7 @@
 import pandas as pd
 import numpy as np 
 import re
+from datetime import datetime, timedelta
 
 
 def get_main_vis_data(stats):
@@ -186,5 +187,8 @@ def get_timeframe(df):
             The earliest (start) and latest (end) dates in the dataframe.
     '''
     start = df['timestamp'].min().strftime('%Y-%m-%d')
+    start_obj = datetime.strptime(start, '%Y-%m-%d')
+    display = start_obj + timedelta(days=30)
+    display = display.strftime('%Y-%m-%d')
     end = df['timestamp'].max().strftime('%Y-%m-%d')
-    return start,end
+    return start,end,display
