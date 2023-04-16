@@ -73,7 +73,7 @@ app.layout = html.Div(className='content', children = [
 #             md=6,
     #        ),
             ],
-            style={"marginBottom": "50px"},
+            style={"marginBottom": "30px"},
         ),
         dbc.Row([
             dbc.Col(
@@ -137,32 +137,30 @@ app.layout = html.Div(className='content', children = [
                                                         None
                                                     ]),
                                                 ]),
-                                                html.Div(className='main_vis', children=[
-                                                    html.Div([
+                                                dbc.Row(className='main_vis_container', children=[
+                                                    dbc.Col([
                                                             dcc.Graph(
                                                                 id='main_vis',
                                                                 figure=main_viz.init_main_figure(preprocess.select_timeframe(stats, start, display))
                                                             )
-                                                        ], style={'width': '75%', 'display': 'inline-block'}),
+                                                        ], width=9),
 
-                                                        html.Div(
-                                                            children=[
-                                                                html.Div(id='panel',
-                                                                        children=[
-                                                                            html.Div(['Influential tweets'], style={
-                                                                                'fontSize': '24px'}),
-                                                                            html.Div(id='date_row', style={
-                                                                                'fontSize': '20px',"margin-top": "6px"}),
-                                                                            html.Div(id='index_var', style={
-                                                                                'fontSize': '20px',"margin-top": "6px"}),
-                                                                            html.Div(id='tweet_row', style={
-                                                                                'fontSize': '18px',"margin-top": "6px"})])]
-                                                            ,style={'width': '23%',
-                                                                    'display': 'inline-block',
-                                                                    'vertical-align': 'top',
-                                                                    'padding': '10px',
-                                                                    'border': '1px solid black',
-                                                                    'border-radius': '10px'})
+                                                    dbc.Col(
+                                                        children=[
+                                                            html.Div(id='panel',
+                                                                    children=[
+                                                                        html.H5(['Influential tweets']),
+                                                                        html.Hr(),
+                                                                        html.Div(id='date_row', style={'color':'gray', 'text-align':'justify'}),
+                                                                        html.Div(id='index_var', style={'color':'gray'}),
+                                                                        html.Br(),
+                                                                        html.Div(id='tweet_row', style={
+                                                                            'fontSize': '18px',"margin-top": "6px"})])]
+                                                        ,style={'display': 'inline-block',
+                                                                'vertical-align': 'top',
+                                                                'padding': '10px',
+                                                                'border': '1px solid black',
+                                                                'border-radius': '10px'})
                                                 ]),            
                                             ], style=graph_box_style)
                                         ], style=tweets_style),
@@ -287,10 +285,10 @@ app.layout = html.Div(className='content', children = [
                 md=12,
             )
         ]),
-    ], style={'display':'inline-block', 'width': '100%;', 'vertical-align':'top', 'word-wrap':'break-word',
-                                                'border': '1px solid black', 'padding':'10px',
-                                                'border-color':'lightgray',
-                                                'margin-left':'1%', 'margin-right':'1%'}
+    ], style={'vertical-align':'top', 'word-wrap':'break-word',
+                'border': '1px solid black', 'padding':'10px',
+                'border-color':'lightgray',
+                'margin-left':'1%', 'margin-right':'1%'}
 )
 
 @app.callback(
@@ -306,7 +304,7 @@ def display_tweet(click, cur_tweet, cur_index, cur_date):
     # TODO : Can we hide the panel if a marker is not yet clicked ?
     ctx = dash.callback_context
     if not ctx.triggered:
-        return [], [], ['Click on a dark marker to see more information about the tweet that lead to high index variation']
+        return [], [], ['Click on a dark marker on the index chart to see more information about the tweet that led to high index variation.']
     
     if (ctx.triggered[0]['prop_id'].split('.')[0]=='main_vis') & (ctx.triggered[0]['value']['points'][0]['curveNumber'] == 0):
         date =  ctx.triggered[0]['value']['points'][0]['x'] 
