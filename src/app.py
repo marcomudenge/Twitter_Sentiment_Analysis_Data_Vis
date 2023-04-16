@@ -110,13 +110,14 @@ app.layout = html.Div(className='content', children = [
                                             ]),
                                             html.Div([
                                                 html.P("Choose the date range of the data to be displayed in the visualisations below using this calendar."), 
-                                                dcc.DatePickerRange(id='my-date-picker-range',  
+                                                dcc.DatePickerRange(id='date-picker-range',  
                                                     min_date_allowed=start,
                                                     max_date_allowed=end,
                                                     start_date=start,
                                                     end_date=display
                                                 ),
-                                            #    html.P("You can also change the date range using drag-and-drop on the horizontal axis of the first visualisation.") #to implement + add some padding w/ calendar above
+                                                html.Br(), html.Br(),
+                                                html.P("You can also refine the date range by using drag-and-drop on the first visualisation. The date range of the cropped region will then be used.")
                                             ], style=graph_box_style)
                                         ], style=tweets_style),                                  
                                     ]),
@@ -131,7 +132,10 @@ app.layout = html.Div(className='content', children = [
                                                 ], style=tweets_header_style),
                                             ]),
                                             html.Div([
-                                                html.P("The price line is green when the variation of the price and the index goes in the same direction, red otherwise. The activity colorscale represent the sum of tweets weighted by the number of followers, the unit of the activity is million of followers. The tweet displayed are the 3 tweets with the most audience (number of follower) tweeted the day before the high index variation."),
+                                                html.P("This first visualisation shows the values of the EURUSD symbol and the activity index over the selected time period."),
+                                                html.P("The price line is green when both the variations of the price and the index go in the same direction, it is red otherwise.\
+                                                        The activity colorscale represents the sum of the number of tweets weighted by the number of followers, the activity is expressed in millions of followers.\
+                                                        The influential tweets displayed in the box are the 3 tweets with the greatest audience (number of followers) posted on the day before the high index variation."),
                                                 html.Div(className='bandeau_dessous', children=[
                                                     html.Div(className='selecteur_viz', children=[
                                                         None
@@ -199,12 +203,8 @@ app.layout = html.Div(className='content', children = [
                                                                 id='bar_vis',
                                                                 figure=bar.init_bar_figure(stats)
                                                             )
-                                                        ], style={'width': '60%', 'display': 'inline-block'}),
-                                                ]),
-                                                dbc.Col([
-                                                    html.Div([
-                                                    ], style={'display':'inline-block', 'vertical-align':'top'}),
-                                                ]),               
+                                                        ], style={'display': 'inline-block'}),
+                                                ])             
                                             ], style=graph_box_style)
                                         ], style=tweets_style),
                                     ]),
@@ -325,11 +325,20 @@ def display_tweet(click, cur_tweet, cur_index, cur_date):
 @app.callback(
     [Output('main_vis', 'figure'),
      Output('bar_vis', 'figure'),
-     Output('radar_vis', 'figure')],
-    [Input('my-date-picker-range', 'start_date'),
-     Input('my-date-picker-range', 'end_date')]
+     Output('radar_vis', 'figure'),
+     Output('date-picker-range', 'start_date'),
+     Output('date-picker-range', 'end_date')],
+    [Input('date-picker-range', 'start_date'),
+     Input('date-picker-range', 'end_date'),
+     Input('main_vis', 'relayoutData')]
 )
-def update_figures(start_date, end_date):
+def update_figures(start_date, end_date, rel):
+    #if callback is triggered by dragging and dropping on main vis
+    ctx = dash.callback_context
+    if ctx.triggered[0]['prop_id'].split('.')[0] == 'main_vis':
+        if 'xaxis.range[0]' in rel.keys():
+            start_date = rel['xaxis.range[0]'].split()[0]
+            end_date = rel['xaxis.range[1]'].split()[0]
 
     # Select the timeframe from the data set
     df = preprocess.select_timeframe(stats, start_date, end_date)
@@ -338,4 +347,4 @@ def update_figures(start_date, end_date):
     bar_fig = bar.init_bar_figure(df)
     radar_fig = radar.init_radar_figure(df)
 
-    return main_fig, bar_fig, radar_fig
+    return main_fig, bar_fig, radar_fig, start_date, end_date
