@@ -21,7 +21,9 @@ def init_bar_figure(data):
         title={
         'text': 'Number of tweets depending on the sum of followers regarding the index_variation',
         'xanchor': 'center',
-        'yanchor': 'top'},
+        'yanchor': 'top',
+        'x': 0.5,
+        'font': dict(size=16)},
         yaxis_title='Count',
     )
     
