@@ -25,6 +25,7 @@ import pandas as pd
 
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 app.title = "" #TBD
+server = app.server
 
 # Read CSV files
 stats = pd.read_csv('assets/df_stats.csv')
