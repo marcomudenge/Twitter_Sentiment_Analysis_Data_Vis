@@ -201,7 +201,7 @@ app.layout = html.Div(className='content', children = [
                                                 ], style=tweets_header_style),
                                             ]),
                                             html.Div([
-                                                html.P("Explanations.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."),
+                                                html.P("This spider chart shows the hourly index variations starting from March 2021 to August 2021. As we can see, the variation seems to peak at 2 PM EST on average. Switch over to the 'Scatter' tab to see more detailed entries."),
                                                 html.Div(className='radar_vis', children=[
                                                     html.Div([
                                                         dcc.Graph(
