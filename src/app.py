@@ -94,7 +94,7 @@ app.layout = html.Div(className='content', children = [
                                                 ], style=tweets_header_style),
                                             ]),
                                             html.Div([
-                                                html.P("Introduction here"),               
+                                                html.P("With the increasing prevalence of social media platforms such as Twitter, there has been a growing interest in analyzing public sentiment and its potential impact on the stock market. This has led to the development of various analytical techniques, including natural language processing, to classify tweets into different sentiment categories such as neutral, bullish, and bearish. By using data visualisation to discover the relation between time series data on USD/EURO stock and tweet sentiment, this project aims to uncover valuable insights into the relationship between social media sentiment and financial decision-making."),               
                                             ], style=graph_box_style)
                                         ], style=tweets_style),                                  
                                     ]),
@@ -169,22 +169,22 @@ app.layout = html.Div(className='content', children = [
                                             ], style=graph_box_style)
                                         ], style=tweets_style),
                                     ]),
-                                    dbc.Row([
-                                        dbc.Col([
-                                            html.Div([
-                                                html.Img(src=profile_image, 
-                                                        style={'height':'50px','width':'50px','border-radius':'50%'}),
-                                                html.Div([
-                                                    html.H5(username, style={'margin':'0px','font-size': '16'}),
-                                                    html.Span(account, style={'color':'gray'})
-                                                ], style=tweets_header_style),
-                                            ]),
-                                            html.Div([
-                                                html.P("Some more explanations. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."),
+                                    # dbc.Row([
+                                    #     dbc.Col([
+                                    #         html.Div([
+                                    #             html.Img(src=profile_image, 
+                                    #                     style={'height':'50px','width':'50px','border-radius':'50%'}),
+                                    #             html.Div([
+                                    #                 html.H5(username, style={'margin':'0px','font-size': '16'}),
+                                    #                 html.Span(account, style={'color':'gray'})
+                                    #             ], style=tweets_header_style),
+                                    #         ]),
+                                    #         html.Div([
+                                    #             html.P("Some more explanations. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."),
               
-                                            ], style=graph_box_style)
-                                        ], style=tweets_style),                                  
-                                    ]),
+                                    #         ], style=graph_box_style)
+                                    #     ], style=tweets_style),                                  
+                                    # ]),
                                     dbc.Row([
                                         dbc.Col([
                                             html.Div([
