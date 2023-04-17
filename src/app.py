@@ -242,7 +242,7 @@ app.layout = html.Div(className='content', children = [
                                                 ], style=tweets_header_style),
                                             ]),
                                             html.Div([
-                                                html.P("CLOSING. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."),               
+                                                html.P("That's it for now! Stay tuned for more information on currency exchange rates."),               
                                             ], style=graph_box_style)
                                         ], style=tweets_style),                                  
                                     ]),
