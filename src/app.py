@@ -132,7 +132,7 @@ app.layout = html.Div(className='content', children = [
                                                 ], style=tweets_header_style),
                                             ]),
                                             html.Div([
-                                                html.P("This first visualisation shows the values of the EURUSD symbol and the activity index over the selected time period."),
+                                                html.P("This first visualisation shows the values of the EURUSD and the activity index over the selected time period."),
                                                 html.P("The price line is green when both the variations of the price and the index go in the same direction, it is red otherwise.\
                                                         The activity colorscale represents the sum of the number of tweets weighted by the number of followers, the activity is expressed in millions of followers.\
                                                         The influential tweets displayed in the box are the 3 tweets with the greatest audience (number of followers) posted on the day before the high index variation."),
@@ -155,11 +155,12 @@ app.layout = html.Div(className='content', children = [
                                                                     children=[
                                                                         html.H5(['Influential tweets']),
                                                                         html.Hr(),
+                                                                        dcc.Input(id='search-input', type='text', placeholder='Search...',style={'border-radius': '20px','background-color': 'lightgray', 'border': 'none'}),
                                                                         html.Div(id='date_row', style={'color':'gray', 'text-align':'justify'}),
                                                                         html.Div(id='index_var', style={'color':'gray'}),
                                                                         html.Br(),
                                                                         html.Div(id='tweet_row', style={
-                                                                            'fontSize': '18px',"margin-top": "6px"})])]
+                                                                            'fontSize': '18px',"margin-top": "0px"})])]
                                                         ,style={'display': 'inline-block',
                                                                 'vertical-align': 'top',
                                                                 'padding': '10px',
@@ -291,36 +292,44 @@ app.layout = html.Div(className='content', children = [
                 'margin-left':'1%', 'margin-right':'1%'}
 )
 
+
 @app.callback(
     [Output('tweet_row', 'children'),
      Output('index_var', 'children'),
      Output('date_row', 'children')],
-    [Input('main_vis', 'clickData')],
+    [Input('main_vis', 'clickData'),
+     Input('search-input', 'value')],
     [State('tweet_row', 'children'),
      State('index_var', 'children'),
      State('date_row', 'children')]
     )
-def display_tweet(click, cur_tweet, cur_index, cur_date):
+def display_tweet(click, query, cur_tweet, cur_index, cur_date):
     # TODO : Can we hide the panel if a marker is not yet clicked ?
+    
     ctx = dash.callback_context
     if not ctx.triggered:
         return [], [], ['Click on a dark marker on the index chart to see more information about the tweet that led to high index variation.']
     
-    if (ctx.triggered[0]['prop_id'].split('.')[0]=='main_vis') & (ctx.triggered[0]['value']['points'][0]['curveNumber'] == 0):
+    if ctx.triggered[0]['prop_id']=='search-input.value':
+        cur_date = cur_date.replace('Date : ', '')
+        tweet = main_viz.get_tweet(cur_date, query)
+        output1 = html.Div([html.P(tweet[i],style={'margin-top': '0px', 'padding-top': '0px'}) for i in range(len(tweet))]
+                , style={'line-height': '90%'})
+        return output1, cur_index, cur_date
+    
+    elif (ctx.triggered[0]['prop_id'].split('.')[0]=='main_vis') & (ctx.triggered[0]['value']['points'][0]['curveNumber'] == 0):
         date =  ctx.triggered[0]['value']['points'][0]['x'] 
-        tweet1, tweet2, tweet3 = main_viz.get_tweet(date)
+        tweet = main_viz.get_tweet(date)
         
-        output1 = html.Div([
-                    html.P(tweet1),
-                    html.P(tweet2, style={'margin-top': '0px', 'padding-top': '0px'}),
-                    html.P(tweet3, style={'margin-top': '0px', 'padding-top': '0px'})
-                ], style={'line-height': '80%'})
+        output1 = html.Div([html.Div([html.P(tweet[i],style={'margin-top': '0px', 'padding-top': '0px'}) for i in range(len(tweet))])
+                ], style={'line-height': '90%'})
         index_variation = stats[stats['timestamp']==date]['index_variation'].round(2).values[0]
         output2 = f'Index variation : {index_variation}'
         output3 = 'Date : ' + str(date)
         return output1, output2, output3
     else:
         return cur_tweet, cur_index, cur_date
+
     
 @app.callback(
     [Output('main_vis', 'figure'),

@@ -13,7 +13,7 @@ def hover_line():
 def hover_bar():
     return '%{x}</br></br><b>Index :</b> %{y} </br><b>Activity :</b> %{marker.color}'+'<extra></extra>'
 
-def get_tweet(date):
+def get_tweet(date, query=None):
     ''' 
     arg :
         date string yyyy-mm-dd
@@ -25,9 +25,14 @@ def get_tweet(date):
     date_minus_3 = date_obj - timedelta(days=3)
     date_minus_3_str =  date_minus_3.strftime('%Y-%m-%d %H:%M')
     
-    mask= (tweets['timestamp']<= date ) & (tweets['timestamp']>= date_minus_3_str)
-    tweet = tweets[mask].sort_values(by = 'n_followers').head(3)['text'].str.replace(r'\bhttps?:/\S+', '', regex=True).values
-    return tweet[0], tweet[1], tweet[2]
+    mask_date= (tweets['timestamp']<= date ) & (tweets['timestamp']>= date_minus_3_str)
+    if query:
+        filter_tweets = tweets[tweets['text'].str.contains(query, case=False)]
+        tweet = filter_tweets[mask_date].sort_values(by = 'n_followers').head(5)['text'].str.replace(r'\bhttps?:/\S+', '', regex=True).values
+        return tweet
+    else:
+        tweet = tweets[mask_date].sort_values(by = 'n_followers').head(5)['text'].str.replace(r'\bhttps?:/\S+', '', regex=True).values
+        return tweet
     
 
 def init_main_figure(df):
