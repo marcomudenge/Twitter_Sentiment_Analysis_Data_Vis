@@ -78,7 +78,7 @@ def init_main_figure(df):
         )
     
     ### build the bar chart
-    bar_chart = px.bar(df, x='timestamp', y='index_value', color='Activity', color_continuous_scale='Blues')
+    bar_chart = px.bar(df, x='timestamp', y='index_value', color='Activity', color_continuous_scale='Teal')
     bar_chart.update_traces(hovertemplate=hover_bar())
     
     fig.add_trace(bar_chart.data[0], row = 2, col=1)

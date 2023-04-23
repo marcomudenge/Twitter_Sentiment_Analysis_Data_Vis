@@ -33,7 +33,7 @@ def get_radar_scatter_hover_template():
           '<span style="font-weight:bold;"><br>variation : </span>'+\
           '<span style="font-weight:normal;">%{r}</span>'   +\
           '<span style="font-weight:bold;"><br>Occurences : </span>'+\
-          '<span style="font-weight:normal;">%{color} times</span>'   +\
+          '<span style="font-weight:normal;">%{marker.color} times</span>'   +\
               '<extra></extra>'
     
     return hov
