@@ -1,8 +1,3 @@
-"""
-    Contains the functions to set up the map visualization.
-
-"""
-
 import plotly.graph_objects as go
 import numpy as np
 
@@ -55,7 +50,7 @@ def init_radar_figure(data):
                                             )),
                       template=None)
 
-    # Add dropdown
+    # Add buttons
     fig.update_layout(
         title="Hourly visualisation of the index variation <br><sup>{} to {}</sup>".format(start, end),
         updatemenus=[
@@ -82,9 +77,8 @@ def init_radar_figure(data):
                 yanchor="bottom"
             ),
         ],
-        legend=dict(traceorder='normal',  # include legend within maximum width
-                    x=0.4,  # set x position of legend within plot
-                    )
+        legend=dict(traceorder='normal',
+                    x=0.4)
     )
 
     return fig

@@ -1,15 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Tue Mar 21 18:22:58 2023
-
-@author: gallou
-
-Contains the server to run our app.
-
-Copied from INF8808 TPs (copyright Olivia Gélinas)
-"""
-
 from flask_failsafe import failsafe
 
 @failsafe

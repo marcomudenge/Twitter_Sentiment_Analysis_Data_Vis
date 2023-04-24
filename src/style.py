@@ -1,8 +1,3 @@
-"""
-This files contains presentations styles for the app and other preferences
-
-"""
-
 profile_image = './assets/icon.png'
 
 username = 'Les Datavores'

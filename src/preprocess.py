@@ -1,6 +1,3 @@
-'''
-    Contains some functions to preprocess the data used in the visualisation.
-'''
 import pandas as pd
 import numpy as np 
 import re

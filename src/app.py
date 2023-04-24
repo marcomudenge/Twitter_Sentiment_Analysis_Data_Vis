@@ -1,13 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Tue Mar 21 18:14:51 2023
-
-@author: gallou
-
-App initialization file
-"""
-
 import dash
 from dash import html
 from dash import dcc
@@ -62,16 +52,6 @@ app.layout = html.Div(className='content', children = [
                     width=11),
                 justify='center'
             ),
-#                dbc.Col(
-#                    html.Div(
-#                       [
-#                          html.Button("Follow", className="mr-2", ),
-#                         html.Button("Message"),
-#                    ],
-#                   #style={"marginTop": "140px"},
-#              ),
-#             md=6,
-    #        ),
             ],
             style={"marginBottom": "30px"},
         ),
@@ -170,22 +150,6 @@ app.layout = html.Div(className='content', children = [
                                             ], style=graph_box_style)
                                         ], style=tweets_style),
                                     ]),
-                                    # dbc.Row([
-                                    #     dbc.Col([
-                                    #         html.Div([
-                                    #             html.Img(src=profile_image, 
-                                    #                     style={'height':'50px','width':'50px','border-radius':'50%'}),
-                                    #             html.Div([
-                                    #                 html.H5(username, style={'margin':'0px','font-size': '16'}),
-                                    #                 html.Span(account, style={'color':'gray'})
-                                    #             ], style=tweets_header_style),
-                                    #         ]),
-                                    #         html.Div([
-                                    #             html.P("Some more explanations. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."),
-              
-                                    #         ], style=graph_box_style)
-                                    #     ], style=tweets_style),                                  
-                                    # ]),
                                     dbc.Row([
                                         dbc.Col([
                                             html.Div([
@@ -292,7 +256,6 @@ app.layout = html.Div(className='content', children = [
                 'margin-left':'1%', 'margin-right':'1%'}
 )
 
-
 @app.callback(
     [Output('tweet_row', 'children'),
      Output('index_var', 'children'),
@@ -303,8 +266,8 @@ app.layout = html.Div(className='content', children = [
      State('index_var', 'children'),
      State('date_row', 'children')]
     )
+
 def display_tweet(click, query, cur_tweet, cur_index, cur_date):
-    # TODO : Can we hide the panel if a marker is not yet clicked ?
     
     ctx = dash.callback_context
     if not ctx.triggered:
@@ -330,7 +293,6 @@ def display_tweet(click, query, cur_tweet, cur_index, cur_date):
     else:
         return cur_tweet, cur_index, cur_date
 
-    
 @app.callback(
     [Output('main_vis', 'figure'),
      Output('bar_vis', 'figure'),
@@ -341,6 +303,7 @@ def display_tweet(click, query, cur_tweet, cur_index, cur_date):
      Input('date-picker-range', 'end_date'),
      Input('main_vis', 'relayoutData')]
 )
+
 def update_figures(start_date, end_date, rel):
     #if callback is triggered by dragging and dropping on main vis
     ctx = dash.callback_context
