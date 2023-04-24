@@ -103,7 +103,8 @@ def add_radar_scatter_figure(fig, scatter_data):
                               mode='markers',
                               marker=dict(color=scatter_data["count"],
                                           colorscale='Teal',
-                                          colorbar=dict(title="Frequency"),
+                                          colorbar=dict(title="Frequency",
+                                                        x=0.75),
                                           showscale=True),
                               hovertemplate=hover_template.get_radar_scatter_hover_template(),
                               visible=False)
