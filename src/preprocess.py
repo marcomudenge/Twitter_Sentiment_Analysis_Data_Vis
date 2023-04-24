@@ -64,6 +64,9 @@ def get_bar_chart_data(stats):
 
     bar_df = df.groupby(['variation', 'sum_influence_3_days']).size().reset_index(name="Count")
     
+    # Do not show bins with no values
+    bar_df = bar_df.loc[bar_df['Count'] != 0]
+
     # Change format of sum_influence_3_days column from (a, b] to a M - b M
     bar_df['sum_influence_3_days'] = bar_df['sum_influence_3_days'].astype(str).replace(r'\((\d+), (\d+)\]', r'\1 - \2', regex=True)
     return bar_df

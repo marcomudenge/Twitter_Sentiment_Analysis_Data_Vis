@@ -11,7 +11,14 @@ import hover_template
 
 
 def init_radar_figure(data):
-    # TODO : Can we add a figure for the avarage activity per hour (amount of tweets and/or followers)
+    '''
+        Creates and return the radar figure.
+
+        Args:
+            data: The dataframe to process
+        Returns:
+            The radar figure
+    '''
 
     # Get the start and end dates for the title
     start, end, _ = preprocess.get_timeframe(data)
@@ -84,7 +91,14 @@ def init_radar_figure(data):
 
 
 def add_radar_scatter_figure(fig, scatter_data):
+    '''
+        Adds scatters to the radar figure.
 
+        Args:
+            data: The base figure and the processed data
+        Returns:
+            The updated figure with added scatters.
+    '''
     scatter = go.Scatterpolar(r=scatter_data["variation"], theta=scatter_data["hour_angle"], 
                               mode='markers',
                               marker=dict(color=scatter_data["count"],
@@ -100,6 +114,14 @@ def add_radar_scatter_figure(fig, scatter_data):
 
 
 def add_radar_trend_figure(fig, mean_df):
+    '''
+        Adds a trend line to the radar figure.
+
+        Args:
+            data: The base figure and the processed data  
+        Returns:
+            The updated figure with added trend.
+    '''
 
     trend = go.Scatterpolar(r=mean_df["index_variation"], theta=mean_df["hour_angle"], mode='lines',
                             connectgaps=True,
