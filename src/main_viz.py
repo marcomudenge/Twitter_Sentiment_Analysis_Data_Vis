@@ -5,13 +5,7 @@ from datetime import datetime, timedelta
 import more_itertools as it
 from plotly.subplots import make_subplots
 
-import preprocess
-
-def hover_line():
-    return '%{x}</br></br> <b>Price :</b> %{y}'+'<extra></extra>'
-
-def hover_bar():
-    return '%{x}</br></br><b>Index :</b> %{y} </br><b>Activity :</b> %{marker.color}'+'<extra></extra>'
+import preprocess, hover_template
 
 def get_tweet(date, query=None):
     ''' 
@@ -73,13 +67,13 @@ def init_main_figure(df):
                 y=y, 
                 mode='lines', 
                 line={'color': color},
-                hovertemplate=hover_line()
+                hovertemplate=hover_template.get_main_vis_line_chart_hover_template()
             )
         )
     
     ### build the bar chart
     bar_chart = px.bar(df, x='timestamp', y='index_value', color='Activity', color_continuous_scale='Teal')
-    bar_chart.update_traces(hovertemplate=hover_bar())
+    bar_chart.update_traces(hovertemplate=hover_template.get_main_vis_bar_chart_hover_template())
     
     fig.add_trace(bar_chart.data[0], row = 2, col=1)
     

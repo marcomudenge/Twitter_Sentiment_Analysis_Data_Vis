@@ -45,7 +45,7 @@ def init_bar_figure(data):
             y=df['Count'],
             name=category,
             marker_color=colors[i],
-            hovertemplate= hover_template.get_barchart_hover_template()
+            hovertemplate= hover_template.get_bar_chart_hover_template()
         ))
                  
     
