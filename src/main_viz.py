@@ -35,10 +35,10 @@ def get_tweet(date, query=None):
         return tweet
     
 
-def init_main_figure(df):
+def init_main_figure(df_stats, df_tweet_hourly):
 
     # preprocess data
-    df = preprocess.get_main_vis_data(df)
+    df = preprocess.get_main_vis_data(df_stats)
 
     # create coordinate  pairs
     x_pairs = it.pairwise(df['timestamp'].to_list())
@@ -49,7 +49,7 @@ def init_main_figure(df):
     colors=['red' if any([i < 0 for i in y_values]) else 'green' for y_values in y_pairs]
 
     # create base figure
-    fig = make_subplots(rows=2, cols=1, shared_xaxes=True, vertical_spacing=0.05)
+    fig = make_subplots(rows=3, cols=1, shared_xaxes=True, vertical_spacing=0.05)
     ### build the scatter trace
     scatter = go.Scatter(
     x=df.loc[df.high_variation.isin([1,-1])]['timestamp'],
@@ -77,19 +77,47 @@ def init_main_figure(df):
             )
         )
     
-    ### build the bar chart
+    ### build the index the bar chart
     bar_chart = px.bar(df, x='timestamp', y='index_value', color='Activity', color_continuous_scale='Teal')
     bar_chart.update_traces(hovertemplate=hover_bar())
     
     fig.add_trace(bar_chart.data[0], row = 2, col=1)
     
+    ### build the tweet repartition stacked bar chart
+    fig.add_trace(go.Bar(
+    x=df_tweet_hourly['timestamp'],
+    y=df_tweet_hourly['count_-1'],
+    marker=dict(color='#FF0000'),
+    name='Bearish'),row=3,col=1)
+
+    fig.add_trace(go.Bar(
+        x=df_tweet_hourly['timestamp'],
+        y=df_tweet_hourly['count_0'],
+        marker=dict(color='#F4D8CE'),
+        name='Neutral'),row=3,col=1)
+
+    fig.add_trace(go.Bar(
+        x=df_tweet_hourly['timestamp'],
+        y=df_tweet_hourly['count_1'],
+        marker=dict(color='#00FFBC'),
+        name='Bullish'),row=3,col=1)
+
+    fig.update_layout(
+        barmode='stack',
+        title='Sentiment Counts Over Time',
+        yaxis=dict(
+            title='Count'
+        ))
+    fig.update_traces(marker_line_width = 0,selector=dict(type="bar"))
+        
     fig.update_layout(coloraxis=bar_chart.layout.coloraxis, showlegend=False,
-                      title={'text': "EUR/USD Price And Index charts"}   
-                      )
+                    title={'text': "EUR/USD Price And Index charts"}   
+                    )
     fig.update_yaxes(title_text='Price (EUR/USD)', row=1, col=1)
     fig.update_yaxes(title_text='Index', row=2, col=1)
+    fig.update_yaxes(title_text="Feeling Dist", row=3, col=1)
     fig.update_traces(marker_line_width = 0,selector=dict(type="bar")) ### no space between bar, making the graph more visible with large range of x axis
     fig.update_layout(plot_bgcolor='#F0F0F0')
-    
+
     return fig
 

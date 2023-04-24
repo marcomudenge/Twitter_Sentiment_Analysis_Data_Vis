@@ -34,6 +34,7 @@ tweets = pd.read_csv('assets/df_tweets.csv')
 # Preprocess data
 stats = preprocess.convert_dates(stats)
 tweets = preprocess.convert_dates(tweets)
+tweets_hourly = preprocess.get_tweet_repartition_main(tweets)
 start,end,display = preprocess.get_timeframe(stats)
 
 app.layout = html.Div(className='content', children = [
@@ -145,7 +146,7 @@ app.layout = html.Div(className='content', children = [
                                                     dbc.Col([
                                                             dcc.Graph(
                                                                 id='main_vis',
-                                                                figure=main_viz.init_main_figure(preprocess.select_timeframe(stats, start, display))
+                                                                figure=main_viz.init_main_figure(preprocess.select_timeframe(stats, start, display),preprocess.select_timeframe(tweets_hourly, start, display))
                                                             )
                                                         ], width=9),
 
@@ -351,8 +352,8 @@ def update_figures(start_date, end_date, rel):
 
     # Select the timeframe from the data set
     df = preprocess.select_timeframe(stats, start_date, end_date)
-
-    main_fig = main_viz.init_main_figure(df)
+    df_tweets = preprocess.select_timeframe(tweets_hourly, start_date, end_date)
+    main_fig = main_viz.init_main_figure(df, df_tweets)
     bar_fig = bar.init_bar_figure(df)
     radar_fig = radar.init_radar_figure(df)
 

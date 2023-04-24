@@ -19,7 +19,6 @@ def get_main_vis_data(stats):
             variations and product.
     '''   
 
-    # create a copy of the dataframe
     df = stats.loc[:, ["price","sum_influence_3_days", "index_value", "index_variation", "timestamp", "high_variation"]]
 
     # Calculate the variation of the index
@@ -39,6 +38,44 @@ def get_main_vis_data(stats):
     df['product'] = rolling_mean['price_variation']*rolling_mean['index_variation']
 
     return df
+
+def get_tweet_repartition_main(tweets):
+    
+    df = tweets.copy(deep=True)
+    # Convert timestamp column to pandas datetime objects
+    df['timestamp'] = pd.to_datetime(df['timestamp'])
+
+    # Set the timestamp as the index of the DataFrame
+    df.set_index('timestamp', inplace=True)
+
+    # Convert sentiment column to categorical data
+    df['sentiment'] = df['sentiment'].astype('category')
+
+    # One-hot encode the sentiment column
+    one_hot = pd.get_dummies(df['sentiment'], prefix='sentiment')
+
+    # Combine the one-hot encoded columns with the original DataFrame
+    df = pd.concat([df, one_hot], axis=1)
+
+    # Define the rolling window
+    window = '72H'  # 3 days
+
+    # Calculate rolling sum for the one-hot encoded columns
+    df[['count_-1', 'count_0', 'count_1']] = df[['sentiment_-1', 'sentiment_0', 'sentiment_1']].rolling(window=window, closed='left').sum()
+
+    # Drop the one-hot encoded columns
+    df.drop(['sentiment_-1', 'sentiment_0', 'sentiment_1'], axis=1, inplace=True)
+
+
+    # Resample the DataFrame every hour and take the max value
+    df_hourly = df.resample('H').max()
+
+    # Reset the index
+    df_hourly.reset_index(inplace=True)
+    df_hourly.fillna(method='ffill', inplace=True)
+    df.reset_index(inplace=True)
+    return df_hourly
+
 
 def get_bar_chart_data(stats):
     '''
