@@ -23,7 +23,7 @@ from style import *
 import radar
 import pandas as pd
 
-app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
+app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP, '/assets/style.css']) #force to load css in this order
 app.title = "" #TBD
 server = app.server
 
@@ -155,7 +155,7 @@ app.layout = html.Div(className='content', children = [
                                                                     children=[
                                                                         html.H5(['Influential tweets']),
                                                                         html.Hr(),
-                                                                        dcc.Input(id='search-input', type='text', placeholder='Search...',style={'border-radius': '20px','background-color': 'lightgray', 'border': 'none'}),
+                                                                        dbc.Input(id='search-input', type='text', placeholder='Search...',),#style={'border-radius': '20px','background-color': 'lightgray', 'border': 'none'}),
                                                                         html.Div(id='date_row', style={'color':'gray', 'text-align':'justify'}),
                                                                         html.Div(id='index_var', style={'color':'gray'}),
                                                                         html.Br(),

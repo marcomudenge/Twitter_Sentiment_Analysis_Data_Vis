@@ -80,7 +80,7 @@ def init_main_figure(df):
     fig.update_layout(coloraxis=bar_chart.layout.coloraxis, showlegend=False,
                       title={'text': "EUR/USD Price And Index charts"}   
                       )
-    fig.update_yaxes(title_text='Price (EUR/USD)', row=1, col=1)
+    fig.update_yaxes(title_text='Price <br> (EUR/USD)', row=1, col=1)
     fig.update_yaxes(title_text='Index', row=2, col=1)
     fig.update_traces(marker_line_width = 0,selector=dict(type="bar")) ### no space between bar, making the graph more visible with large range of x axis
     fig.update_layout(plot_bgcolor='#F0F0F0')

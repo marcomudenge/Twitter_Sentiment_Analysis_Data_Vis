@@ -1,0 +1,11 @@
+/* ugly-ish workaround to rotate y axes titles on the first and second viz (no option to do it using plotly yaxes properties) */
+#main_vis .infolayer [class^='y'][class$='title'] {
+    transform: rotate(0deg) translate(25px);
+} 
+#main_vis .infolayer [class^='y2'][class$='title'] {
+    transform: rotate(0deg) translate(9px);
+} 
+
+.bar_vis .infolayer [class^='y'][class$='title'] {
+    transform: rotate(0deg);
+} 
