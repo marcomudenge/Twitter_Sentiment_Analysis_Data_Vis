@@ -46,7 +46,8 @@ def init_radar_figure(data):
                                             showline=True,
                                             showgrid=True,
                                             gridcolor='white',
-                                            tickfont=dict(size=10)
+                                            tickfont=dict(size=10),
+                                            tickangle=-45
                                             )),
                       template=None)
 
@@ -123,5 +124,4 @@ def add_radar_trend_figure(fig, mean_df):
                             hovertemplate=hover_template.get_radar_trend_hover_template())
 
     fig.add_trace(trend)
-    
     return fig
