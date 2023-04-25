@@ -49,7 +49,7 @@ def init_radar_figure(data):
                                             tickfont=dict(size=10),
                                             tickangle=45
                                             )),
-                      template=None)
+                      template=None) 
 
     # Add buttons
     fig.update_layout(
@@ -124,4 +124,5 @@ def add_radar_trend_figure(fig, mean_df):
                             hovertemplate=hover_template.get_radar_trend_hover_template())
 
     fig.add_trace(trend)
+    fig.update_traces(marker_color='teal', selector=dict(type='scatterpolar'))
     return fig
