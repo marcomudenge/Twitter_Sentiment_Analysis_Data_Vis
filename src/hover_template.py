@@ -33,8 +33,8 @@ def get_bar_chart_hover_template():
         returns:
             The content of the tooltip
     '''
-    return '<span style="font-weight:bold;">Nombre de tweets :</b> %{y} </span>' +\
-           '<span style="font-weight:bold;"><br>Intervalle de followers :</b> %{x} millions</span>' +\
+    return '<span style="font-weight:bold;">Number of tweets :</b> %{y} </span>' +\
+           '<span style="font-weight:bold;"><br>Follower count range :</b> %{x} millions</span>' +\
             '<extra></extra>'
 
 def get_main_vis_line_chart_hover_template():
