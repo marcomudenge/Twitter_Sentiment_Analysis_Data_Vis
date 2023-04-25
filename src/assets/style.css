@@ -10,9 +10,7 @@
     transform: rotate(0deg);
 } 
 #datepicker_button {
-    position: fixed;
-    top: 100px;
-    left: 75vw;
+    left: 80vw;
     z-index: 1000;
 }
 
@@ -23,4 +21,13 @@
 
 .toast-header {
     background-color: #0d6efd;
+}
+
+#scroll-up-button {
+    position: fixed;
+    display: none;
+}
+
+#scroll-up-button.is-visible {
+    opacity: 1;
 }
