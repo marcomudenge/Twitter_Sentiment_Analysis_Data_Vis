@@ -4,8 +4,6 @@ from dash import dcc, no_update
 from dash.dependencies import Input, Output, State, ClientsideFunction
 import dash_bootstrap_components as dbc
 
-from datetime import date, datetime
-
 import preprocess
 import main_viz
 import bar
