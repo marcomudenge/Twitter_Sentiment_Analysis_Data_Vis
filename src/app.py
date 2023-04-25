@@ -33,10 +33,11 @@ app.layout = html.Div(id='main-div', className='content', children = [
                                 max_date_allowed=end,
                                 start_date=start,
                                 end_date=display,
+                                style = {'width': '290px', 'font-size' : '8px'},
                                 with_portal=True)],
                                 id='datepicker_button',
-                                duration=13000,
-                                style = {'bottom': '120px', 'right':'150px'},
+                                duration=9000,
+                                style = {'position':'fixed','width':'fit-content','bottom': '120px', 'right':'40px', 'z-index':'9999'},
                                 ),
         html.Div([
             dbc.Row(
@@ -346,12 +347,6 @@ def update_figures(start_date, end_date, rel):
     radar_fig = radar.init_radar_figure(df)
 
     return main_fig, bar_fig, radar_fig, start_date, end_date
-
-app.clientside_callback(
-    ClientsideFunction(namespace="clientside", function_name="make_draggable"),
-    Output("datepicker_button", "className"), # dummy attribute
-    [Input("datepicker_button", "id")],
-)
 
 @app.callback(
     Output("datepicker_button", "is_open"), 
