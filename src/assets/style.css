@@ -10,6 +10,7 @@
     transform: rotate(0deg);
 } 
 #datepicker_button {
+    position: fixed;
     left: 80vw;
     z-index: 1000;
 }

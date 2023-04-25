@@ -1,6 +1,6 @@
 import dash
 from dash import html
-from dash import dcc
+from dash import dcc, no_update
 from dash.dependencies import Input, Output, State, ClientsideFunction
 import dash_bootstrap_components as dbc
 
@@ -26,13 +26,18 @@ stats = preprocess.convert_dates(stats)
 tweets = preprocess.convert_dates(tweets)
 start,end,display = preprocess.get_timeframe(stats)
 
-app.layout = html.Div(className='content', children = [
+app.layout = html.Div(id='main-div', className='content', children = [
         dbc.Toast(children = [
             dcc.DatePickerRange(id='date-picker-range',
                                 min_date_allowed=start,
                                 max_date_allowed=end,
                                 start_date=start,
-                                end_date=display)], id='datepicker_button'),
+                                end_date=display,
+                                with_portal=True)],
+                                id='datepicker_button',
+                                duration=13000,
+                                style = {'bottom': '130px'},
+                                ),
         html.Div([
             dbc.Row(
                 dbc.Col(
@@ -95,15 +100,7 @@ app.layout = html.Div(className='content', children = [
                                                 ], style=tweets_header_style),
                                             ]),
                                             html.Div([
-                                                html.P("Choose the date range of the data to be displayed in the visualisations below using this calendar."), 
-                                                # dcc.DatePickerRange(id='date-picker-range1',  
-                                                #     min_date_allowed=start,
-                                                #     max_date_allowed=end,
-                                                #     start_date=start,
-                                                #     end_date=display
-                                                # ),
-                                                html.Br(), html.Br(),
-                                                html.P("You can also refine the date range by using drag-and-drop on the first visualisation. The date range of the cropped region will then be used.")
+                                                html.P("Choose the date range of the data to be displayed in the visualisations below using this calendar.\nYou can also refine the date range by using drag-and-drop on the first visualisation. The date range of the cropped region will then be used.")
                                             ], style=graph_box_style)
                                         ], style=tweets_style),                                  
                                     ]),
@@ -256,8 +253,30 @@ app.layout = html.Div(className='content', children = [
                 md=12,
             )
         ]),
-
-dbc.Button("Back to Top", href="/", className='bi-arrow-up bi-align-center me-2', style={"border-radius": "10px", "width": "fit-content", "height": "35px", "position": "absolute", 'left': '87.7vw', 'bottom': '100px', 'font-size': '16px'}),
+        dbc.Row(id='menu', children=[
+                    dbc.Col(
+                        dbc.Button("",
+                            id= 'scroll-up-button',
+                            href="/", 
+                            className='bi-arrow-up bi-align-center me-2', 
+                            style={'position': 'fixed','border-radius': '10px','width':'fit-content','margin-right':'10px',
+                                   'display':'none', 'zoom':'1',
+                                    'color': '#0d6efd',
+                                    'background-color': 'white',
+                                    'border-color':'#0d6efd'
+                                   }
+                            ),
+                    ),dbc.Col(),
+                    dbc.Col(
+                        dbc.Button("Select Dates",
+                            id="auto-toast-toggle",
+                            color="primary",
+                            n_clicks=0,
+                            style={'position': 'fixed', 'width':'fit-content', "border-radius": "10px", 'zoom':'1'}
+                            ),
+                        )], 
+                style={'position': 'fixed','width':'fit-content', 'bottom': '100px', 'right': '7%', 'zoom':'1'},
+                ) 
     ], style={'vertical-align':'top', 'word-wrap':'break-word',
                 'border': '1px solid black', 'padding':'10px',
                 'border-color':'lightgray',
@@ -335,3 +354,13 @@ app.clientside_callback(
     Output("datepicker_button", "className"), # dummy attribute
     [Input("datepicker_button", "id")],
 )
+
+@app.callback(
+    Output("datepicker_button", "is_open"), 
+    [Input("auto-toast-toggle", "n_clicks")]
+)
+
+def open_toast(n):
+    if n == 0:
+        return no_update
+    return True
