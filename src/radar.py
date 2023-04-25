@@ -47,7 +47,7 @@ def init_radar_figure(data):
                                             showgrid=True,
                                             gridcolor='white',
                                             tickfont=dict(size=10),
-                                            tickangle=-45
+                                            tickangle=45
                                             )),
                       template=None)
 
