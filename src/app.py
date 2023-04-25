@@ -14,7 +14,7 @@ import radar
 import pandas as pd
 
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP, '/assets/style.css', dbc.icons.BOOTSTRAP]) #force to load css in this order
-app.title = "" #TBD
+app.title = "Les Datavores — Data Analysis"
 server = app.server
 
 # Read CSV files
@@ -43,7 +43,7 @@ app.layout = html.Div(id='main-div', className='content', children = [
                 dbc.Col(
                     html.Div(
                         html.Img(src=profile_image, style={'borderRadius': '50%','height': '100%', 'width': '100%'} ),
-                        style={"textAlign": "center","borderRadius": "50%","backgroundColor": "lightgray","height": "100%", "width": "100%",},#"margin-top": "35px", 'margin-left': '25px'},
+                        style={"textAlign": "center","borderRadius": "50%","backgroundColor": "lightgray","height": "100%", "width": "100%",},
                     ),
                     width={'size': 2, 'offset':1},),
             ),
@@ -138,7 +138,7 @@ app.layout = html.Div(id='main-div', className='content', children = [
                                                                     children=[
                                                                         html.H5(['Influential tweets']),
                                                                         html.Hr(),
-                                                                        dbc.Input(id='search-input', type='text', placeholder='Search...',),#style={'border-radius': '20px','background-color': 'lightgray', 'border': 'none'}),
+                                                                        dbc.Input(id='search-input', type='text', placeholder='Search...',),
                                                                         html.Div(id='date_row', style={'color':'gray', 'text-align':'justify'}),
                                                                         html.Div(id='index_var', style={'color':'gray'}),
                                                                         html.Br(),
@@ -331,7 +331,6 @@ def display_tweet(click, query, cur_tweet, cur_index, cur_date):
      Input('date-picker-range', 'end_date'),
      Input('main_vis', 'relayoutData')]
 )
-
 def update_figures(start_date, end_date, rel):
     #if callback is triggered by dragging and dropping on main vis
     ctx = dash.callback_context
