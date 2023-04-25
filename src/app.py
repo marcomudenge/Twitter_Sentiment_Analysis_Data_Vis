@@ -1,7 +1,7 @@
 import dash
 from dash import html
 from dash import dcc
-from dash.dependencies import Input, Output, State
+from dash.dependencies import Input, Output, State, ClientsideFunction
 import dash_bootstrap_components as dbc
 
 from datetime import date, datetime
@@ -13,7 +13,7 @@ from style import *
 import radar
 import pandas as pd
 
-app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP, '/assets/style.css']) #force to load css in this order
+app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP, '/assets/style.css', dbc.icons.BOOTSTRAP]) #force to load css in this order
 app.title = "" #TBD
 server = app.server
 
@@ -27,6 +27,12 @@ tweets = preprocess.convert_dates(tweets)
 start,end,display = preprocess.get_timeframe(stats)
 
 app.layout = html.Div(className='content', children = [
+        dbc.Toast(children = [
+            dcc.DatePickerRange(id='date-picker-range',
+                                min_date_allowed=start,
+                                max_date_allowed=end,
+                                start_date=start,
+                                end_date=display)], id='datepicker_button'),
         html.Div([
             dbc.Row(
                 dbc.Col(
@@ -90,12 +96,12 @@ app.layout = html.Div(className='content', children = [
                                             ]),
                                             html.Div([
                                                 html.P("Choose the date range of the data to be displayed in the visualisations below using this calendar."), 
-                                                dcc.DatePickerRange(id='date-picker-range',  
-                                                    min_date_allowed=start,
-                                                    max_date_allowed=end,
-                                                    start_date=start,
-                                                    end_date=display
-                                                ),
+                                                # dcc.DatePickerRange(id='date-picker-range1',  
+                                                #     min_date_allowed=start,
+                                                #     max_date_allowed=end,
+                                                #     start_date=start,
+                                                #     end_date=display
+                                                # ),
                                                 html.Br(), html.Br(),
                                                 html.P("You can also refine the date range by using drag-and-drop on the first visualisation. The date range of the cropped region will then be used.")
                                             ], style=graph_box_style)
@@ -250,10 +256,13 @@ app.layout = html.Div(className='content', children = [
                 md=12,
             )
         ]),
+
+dbc.Button("Back to Top", href="/", className='bi-arrow-up bi-align-center me-2', style={"border-radius": "10px", "width": "fit-content", "height": "35px", "position": "absolute", 'left': '87.7vw', 'bottom': '100px', 'font-size': '16px'}),
     ], style={'vertical-align':'top', 'word-wrap':'break-word',
                 'border': '1px solid black', 'padding':'10px',
                 'border-color':'lightgray',
-                'margin-left':'1%', 'margin-right':'1%'}
+                'margin-left':'1%', 'margin-right':'1%',
+                'position': 'relative'},
 )
 
 @app.callback(
@@ -320,3 +329,9 @@ def update_figures(start_date, end_date, rel):
     radar_fig = radar.init_radar_figure(df)
 
     return main_fig, bar_fig, radar_fig, start_date, end_date
+
+app.clientside_callback(
+    ClientsideFunction(namespace="clientside", function_name="make_draggable"),
+    Output("datepicker_button", "className"), # dummy attribute
+    [Input("datepicker_button", "id")],
+)

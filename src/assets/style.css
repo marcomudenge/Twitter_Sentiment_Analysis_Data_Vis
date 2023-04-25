@@ -9,3 +9,18 @@
 .bar_vis .infolayer [class^='y'][class$='title'] {
     transform: rotate(0deg);
 } 
+#datepicker_button {
+    position: fixed;
+    top: 100px;
+    left: 75vw;
+    z-index: 1000;
+}
+
+.toast-body {
+    display: flex;
+    justify-content: center;
+}
+
+.toast-header {
+    background-color: #0d6efd;
+}
