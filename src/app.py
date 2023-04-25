@@ -36,7 +36,7 @@ app.layout = html.Div(id='main-div', className='content', children = [
                                 with_portal=True)],
                                 id='datepicker_button',
                                 duration=13000,
-                                style = {'bottom': '130px'},
+                                style = {'bottom': '120px', 'right':'150px'},
                                 ),
         html.Div([
             dbc.Row(
@@ -131,7 +131,6 @@ app.layout = html.Div(id='main-div', className='content', children = [
                                                                 figure=main_viz.init_main_figure(preprocess.select_timeframe(stats, start, display))
                                                             )
                                                         ], width=9),
-
                                                     dbc.Col(
                                                         children=[
                                                             html.Div(id='panel',
@@ -274,8 +273,8 @@ app.layout = html.Div(id='main-div', className='content', children = [
                             n_clicks=0,
                             style={'position': 'fixed', 'width':'fit-content', "border-radius": "10px", 'zoom':'1'}
                             ),
-                        )], 
-                style={'position': 'fixed','width':'fit-content', 'bottom': '100px', 'right': '7%', 'zoom':'1'},
+                    )], 
+                style={'position': 'fixed','width':'fit-content', 'bottom': '100px', 'right': '150px', 'zoom':'1'},
                 ) 
     ], style={'vertical-align':'top', 'word-wrap':'break-word',
                 'border': '1px solid black', 'padding':'10px',
