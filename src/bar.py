@@ -40,6 +40,11 @@ def init_bar_figure(data):
         xaxis_title='Activity (3-Days Influence)',
         legend_title='Type of variation'
     )
+    
+    fig.update_layout({
+        'plot_bgcolor': '#F0F0F0',
+    })
+
     fig.update_traces(hovertemplate = hover_template.get_bar_chart_hover_template())
 
     return fig
