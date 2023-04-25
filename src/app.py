@@ -34,7 +34,7 @@ app.layout = html.Div(id='main-div', className='content', children = [
                                 style = {'width': '290px', 'font-size' : '8px'},
                                 with_portal=True)],
                                 id='datepicker_button',
-                                duration=9000,
+                                duration=13000,
                                 style = {'position':'fixed','width':'fit-content','bottom': '120px', 'right':'40px', 'z-index':'9999'},
                                 ),
         html.Div([
@@ -167,7 +167,7 @@ app.layout = html.Div(id='main-div', className='content', children = [
                                                     html.Div([
                                                             dcc.Graph(
                                                                 id='bar_vis',
-                                                                figure=bar.init_bar_figure(stats)
+                                                                figure=bar.init_bar_figure(preprocess.select_timeframe(stats, start, display))
                                                             )
                                                         ], style={'display': 'flex', 'justify-content': 'center'}),
                                                 ])             
@@ -190,7 +190,7 @@ app.layout = html.Div(id='main-div', className='content', children = [
                                                     html.Div([
                                                         dcc.Graph(
                                                             id='radar_vis',
-                                                            figure=radar.init_radar_figure(stats)
+                                                            figure=radar.init_radar_figure(preprocess.select_timeframe(stats, start, display))
                                                             )]
                                                         )
                                                 ]),

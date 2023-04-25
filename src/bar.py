@@ -22,7 +22,8 @@ def init_bar_figure(data):
                 color_discrete_map = { "Bearish": "#FF0000",
                                     "Neutral": "#F4D8CE",
                                     "Bullish": "#00FFBC"},
-                category_orders={"variation": ["Bearish", "Neutral", "Bullish"]}
+                category_orders={'sum_influence_3_days': ['0 - 2','2 - 4','4 - 6'],  
+                                 "variation": ["Bearish", "Neutral", "Bullish"]}
         )
 
     # update the figure & hover template

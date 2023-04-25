@@ -8,6 +8,8 @@ import preprocess, hover_template
 
 def get_tweet(date, query=None):
     ''' 
+    This function return the 2 tweets with the most follower for a given date
+
     arg :
         date string yyyy-mm-dd
     return: 
@@ -29,7 +31,14 @@ def get_tweet(date, query=None):
     
 
 def init_main_figure(df):
+    '''
+        Creates and return the main figure.
 
+        Args:
+            data: The dataframe to process
+        Returns:
+            The main figure
+    '''
     # preprocess data
     df = preprocess.get_main_vis_data(df)
 

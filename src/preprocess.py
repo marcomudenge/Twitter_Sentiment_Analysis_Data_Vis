@@ -184,10 +184,9 @@ def get_timeframe(df):
             dataframe: The dataframe to process
         Returns:
             The earliest (start) and latest (end) dates in the dataframe.
+            Also returns an init date to display on the visualisation.
     '''
     start = df['timestamp'].min().strftime('%Y-%m-%d')
-    start_obj = datetime.strptime(start, '%Y-%m-%d')
-    display = start_obj + timedelta(days=30)
-    display = display.strftime('%Y-%m-%d')
+    display = (datetime.strptime(start, '%Y-%m-%d') + timedelta(days=30)).strftime('%Y-%m-%d')
     end = df['timestamp'].max().strftime('%Y-%m-%d')
     return start,end,display

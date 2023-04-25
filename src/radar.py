@@ -15,13 +15,10 @@ def init_radar_figure(data):
             The radar figure
     '''
 
-    # Get the start and end dates for the title
+    # Get the start and end dates for the title and process data
     start, end, _ = preprocess.get_timeframe(data)
 
-    # prepare the average data set
     mean_df = preprocess.get_radar_trend_data(data)
-
-    # prepare the scatter data set
     scatter_data = preprocess.get_radar_scatter_data(data)
 
     # Create the figures

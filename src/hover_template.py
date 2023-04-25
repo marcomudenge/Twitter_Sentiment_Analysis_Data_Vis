@@ -22,8 +22,8 @@ def get_radar_scatter_hover_template():
             The content of the tooltip
     '''
     return '<span style="font-weight:bold;">Time :</b> %{theta}:00 <br></span>' +\
-           '<span style="font-weight:bold;"><br>variation :</b> %{r} <br></span>'+\
-           '<span style="font-weight:bold;"><br>Occurences :</b> %{marker.color} times</span>'+\
+           '<span style="font-weight:bold;">variation :</b> %{r} <br></span>'+\
+           '<span style="font-weight:bold;">Occurences :</b> %{marker.color} times</span>'+\
              '<extra></extra>'
 
 def get_bar_chart_hover_template():
